@@ -18,9 +18,9 @@ public class Progetto {
     @Column(name = "stato", nullable = false, length = 20)
     public String stato;
 
-    @OneToMany(mappedBy = "progetto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "progetto")
     public List<Attivita> attivita;
-    @OneToMany(mappedBy = "progetto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "progetto")
     public List<Associato> associati;
 
     public Progetto(){
@@ -32,7 +32,7 @@ public class Progetto {
         this.attivita = attivita;
     }
 
-    public long getIdProgetto() {return idProgetto;}
+    public Long getIdProgetto() {return idProgetto;}
     public void setIdProgetto(Long idProgetto) {this.idProgetto = idProgetto;}
     public String getNome() {return nome;}
     public void setNome(String nome) {this.nome = nome;}
@@ -42,4 +42,6 @@ public class Progetto {
     public void setStato(String stato) {this.stato = stato;}
     public List<Attivita> getAttivita() {return attivita;}
     public void setAttivita(List<Attivita> attivita) {this.attivita = attivita;}
+    public List<Associato> getAssociati() {return associati;}
+    public void setAssociati(List<Associato> associati) {this.associati = associati;}
 }

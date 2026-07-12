@@ -1,5 +1,8 @@
 package com.example.gestionale.controllers;
 
+import com.example.gestionale.dto.ProgettoRequestDTO;
+import com.example.gestionale.dto.ProgettoResponseDTO;
+import com.example.gestionale.exceptions.EntitaNonTrovata;
 import com.example.gestionale.models.Progetto;
 import com.example.gestionale.services.ProgettoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,28 +19,24 @@ public class ProgettoController {
     public ProgettoService progettoService;
 
     @GetMapping("/lista")
-    public ResponseEntity<List<Progetto>> listaTuttiProgetti() {
-        List<Progetto> progetti = progettoService.listaProgetti();
-        return ResponseEntity.ok(progetti);
+    public ResponseEntity<List<ProgettoResponseDTO>> listaTuttiProgetti() {
+        return ResponseEntity.ok(progettoService.listaProgetti());
     }
     @PostMapping("/crea")
-    public ResponseEntity<Progetto> creaProgetto(@RequestBody Progetto progetto){
-        Progetto nuovoProgetto = progettoService.salvaProgetto(progetto);
-        return new ResponseEntity<>(nuovoProgetto, HttpStatus.CREATED);
+    public ResponseEntity<ProgettoResponseDTO> creaProgetto(@RequestBody ProgettoRequestDTO progetto){
+        return ResponseEntity.status(201).body(progettoService.salvaProgetto(progetto));
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Progetto> schedaProgettoPerId(@PathVariable("id") Long id) {
-        Progetto progetto = progettoService.ottieniProgettoPerId(id);
-        return ResponseEntity.ok(progetto);
+    public ResponseEntity<ProgettoResponseDTO> schedaProgettoPerId(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(progettoService.schedaProgettoPerId(id));
     }
-    @PutMapping("/modifica/{id}")
-    public ResponseEntity<Progetto> modificaProgettoPerId(@PathVariable("id") Long id, @RequestBody Progetto progetto){
-        Progetto progettoModificato = progettoService.modificaProgettoPerId(id, progetto);
-        return new ResponseEntity<>(progettoModificato, HttpStatus.CREATED);
+    @PatchMapping("/modifica/{id}")
+    public ResponseEntity<ProgettoResponseDTO> modificaProgettoPerId(@PathVariable("id") Long id, @RequestBody ProgettoRequestDTO progetto){
+        return ResponseEntity.ok(progettoService.modificaProgettoPerId(id, progetto));
     }
     @DeleteMapping("/elimina/{id}")
-    public ResponseEntity<String> eliminaprogettoPerId(@PathVariable("id") Long id){
+    public ResponseEntity<String> eliminaProgettoPerId(@PathVariable("id") Long id){
         progettoService.eliminaProgettoPerId(id);
-        return new ResponseEntity<>("Progetto eliminato con successo", HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 }

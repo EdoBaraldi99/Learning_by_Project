@@ -1,9 +1,9 @@
 package com.example.gestionale.controllers;
 
-import com.example.gestionale.models.Attivita;
+import com.example.gestionale.dto.AttivitaRequestDTO;
+import com.example.gestionale.dto.AttivitaResponseDTO;
 import com.example.gestionale.services.AttivitaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -16,28 +16,24 @@ public class AttivitaController {
     public AttivitaService attivitaService;
 
     @GetMapping("/lista")
-    public ResponseEntity<List<Attivita>> listaTutteAttivita() {
-        List<Attivita> attivita = attivitaService.listaAttivita();
-        return ResponseEntity.ok(attivita);
+    public ResponseEntity<List<AttivitaResponseDTO>> listaTuttiAttivita() {
+        return ResponseEntity.ok(attivitaService.listaAttivita());
     }
     @PostMapping("/crea")
-    public ResponseEntity<Attivita> creaAttivita(@RequestBody Attivita attivita){
-        Attivita nuovaAttivita = attivitaService.salvaAttivita(attivita);
-        return new ResponseEntity<>(nuovaAttivita, HttpStatus.CREATED);
+    public ResponseEntity<AttivitaResponseDTO> creaAttivita(@RequestBody AttivitaRequestDTO attivita){
+        return ResponseEntity.status(201).body(attivitaService.salvaAttivita(attivita));
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Attivita> schedaAttivitaPerId(@PathVariable("id") Long id) {
-        Attivita attivita = attivitaService.ottieniAttivitaPerId(id);
-        return ResponseEntity.ok(attivita);
+    public ResponseEntity<AttivitaResponseDTO> schedaAttivitaPerId(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(attivitaService.schedaAttivitaPerId(id));
     }
-    @PutMapping("/modifica/{id}")
-    public ResponseEntity<Attivita> modificaAttivitaById(@PathVariable("id") Long id, @RequestBody Attivita attivita){
-        Attivita attivitaModificata = attivitaService.modificaAttivitaPerId(id, attivita);
-        return new ResponseEntity<>(attivitaModificata, HttpStatus.CREATED);
+    @PatchMapping("/modifica/{id}")
+    public ResponseEntity<AttivitaResponseDTO> modificaAttivitaPerId(@PathVariable("id") Long id, @RequestBody AttivitaRequestDTO attivita){
+        return ResponseEntity.ok(attivitaService.modificaAttivitaPerId(id, attivita));
     }
     @DeleteMapping("/elimina/{id}")
-    public ResponseEntity<String> eliminaAttivitaPerId(@PathVariable("id") Long id){
-         attivitaService.eliminaAttivitaPerId(id);
-        return new ResponseEntity<>("Task eliminata con successo", HttpStatus.OK);
+    public ResponseEntity<String> eliminaprogettoPerId(@PathVariable("id") Long id){
+        attivitaService.eliminaAttivitaPerId(id);
+        return ResponseEntity.noContent().build();
     }
 }

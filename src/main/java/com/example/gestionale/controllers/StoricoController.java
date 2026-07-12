@@ -1,9 +1,10 @@
 package com.example.gestionale.controllers;
 
-import com.example.gestionale.models.Storico;
+
+import com.example.gestionale.dto.StoricoRequestDTO;
+import com.example.gestionale.dto.StoricoResponseDTO;
 import com.example.gestionale.services.StoricoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -16,18 +17,22 @@ public class StoricoController {
     public StoricoService storicoService;
 
     @GetMapping("/lista")
-    public ResponseEntity<List<Storico>> listaTuttiStorici() {
-        List<Storico> storici = storicoService.listaStorici();
-        return ResponseEntity.ok(storici);
+    public ResponseEntity<List<StoricoResponseDTO>> listaTuttiStoricii() {
+        return ResponseEntity.ok(storicoService.listaStorici());
     }
+
     @PostMapping("/crea")
-    public ResponseEntity<Storico> creaStorico(@RequestBody Storico storico){
-        Storico nuovoStorico = storicoService.salvaStorico(storico);
-        return new ResponseEntity<>(nuovoStorico, HttpStatus.CREATED);
+    public ResponseEntity<StoricoResponseDTO> creaStorico(@RequestBody StoricoRequestDTO storico) {
+        return ResponseEntity.status(201).body(storicoService.salvaStorico(storico));
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Storico> schedaStoricoById(@PathVariable("id") Long id) {
-        Storico storico = storicoService.ottieniStoricoPerId(id);
-        return ResponseEntity.ok(storico);
+    public ResponseEntity<StoricoResponseDTO> schedaStoricooPerId(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(storicoService.schedaStoricoPerId(id));
+    }
+
+    @PatchMapping("/modifica/{id}")
+    public ResponseEntity<StoricoResponseDTO> modificaStoricoPerId(@PathVariable("id") Long id, @RequestBody StoricoRequestDTO storico) {
+        return ResponseEntity.ok(storicoService.modificaStorico(id, storico));
     }
 }

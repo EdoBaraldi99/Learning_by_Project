@@ -30,7 +30,7 @@ public class Storico {
         this.attivita = attivita;
     }
 
-    public long getIdStorico() {return idStorico;}
+    public Long getIdStorico() {return idStorico;}
     public void setIdStorico(Long idStorico) {this.idStorico = idStorico;}
     public LocalDate getData() {return data;}
     public void setData(LocalDate data) {this.data = data;}

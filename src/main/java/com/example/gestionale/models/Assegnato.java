@@ -35,14 +35,16 @@ public class Assegnato {
         this.ruolo = ruolo;
     }
 
+    public Long getIdDipendenteAssegnaTask() {return idDipendenteAssegnaTask;}
+    public void setIdDipendenteAssegnaTask(Long id) {this.idDipendenteAssegnaTask = id;}
     public Dipendente getDipendente() {return dipendente;}
     public void setDipendente(Dipendente dipendente) {this.dipendente = dipendente;}
     public Attivita getAttivita() {return attivita;}
     public void setAttivita(Attivita attivita) {this.attivita = attivita;}
-    public LocalDate getDataInizio() {return dataInizio;}
-    public void setDataInizio(LocalDate dataInizio) {this.dataInizio = dataInizio;}
-    public LocalDate getDataFine() {return dataFine;}
-    public void setDataFine(LocalDate dataFine) {this.dataFine = dataFine;}
+    public LocalDate getDataInizioAttivita() {return dataInizio;}
+    public void setDataInizioAttivita(LocalDate dataInizio) {this.dataInizio = dataInizio;}
+    public LocalDate getDataFineAttivita() {return dataFine;}
+    public void setDataFineAttivita(LocalDate dataFine) {this.dataFine = dataFine;}
     public String getRuolo() {return ruolo;}
     public void setRuolo(String ruolo) {this.ruolo = ruolo;}
 }

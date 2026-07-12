@@ -32,7 +32,7 @@ public class Attivita {
     public Progetto progetto;
     @OneToMany(mappedBy = "attivita", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<Storico> storico;
-    @OneToMany(mappedBy = "attivita", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "attivita")
     public List<Assegnato> assegnati;
 
     public Attivita(){
@@ -51,8 +51,8 @@ public class Attivita {
         this.assegnati = assegnati;
     }
 
-    public long getIdTask() {return idTask;}
-    public void setIdTask(Long id_task) {this.idTask = idTask;}
+    public Long getIdTask() {return idTask;}
+    public void setIdTask(Long idTask) {this.idTask = idTask;}
     public String getTitolo() {return titolo;}
     public void setTitolo(String titolo) {this.titolo = titolo;}
     public String getDescrizione() {return descrizione;}

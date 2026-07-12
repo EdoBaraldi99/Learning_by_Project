@@ -1,8 +1,11 @@
 package com.example.gestionale.services;
 
 
+import com.example.gestionale.dto.ProgettoRequestDTO;
+import com.example.gestionale.dto.ProgettoResponseDTO;
 import com.example.gestionale.models.Progetto;
 import com.example.gestionale.repository.ProgettoRepository;
+import com.example.gestionale.exceptions.EntitaNonTrovata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -12,45 +15,52 @@ public class ProgettoService {
     @Autowired
     public ProgettoRepository progettoRepository;
 
-    public List<Progetto> listaProgetti() {
-        return progettoRepository.findAll();
+    public List<ProgettoResponseDTO> listaProgetti() {
+        return progettoRepository.findAll().stream()
+                .map(ProgettoResponseDTO::fromEntity)
+                .toList();
     }
-    public Progetto salvaProgetto(Progetto progetto) {
-        return progettoRepository.save(progetto);
+    public ProgettoResponseDTO schedaProgettoPerId(Long id) {
+        Progetto p = progettoRepository.findById(id)
+                .orElseThrow(() -> new EntitaNonTrovata("Progetto con Id: " + id + " non trovato"));
+        return ProgettoResponseDTO.fromEntity(p);
     }
-    public Progetto ottieniProgettoPerId(Long id) {
-        return progettoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Progetto con ID: " + id + " non trovato nel database"));
+    public ProgettoResponseDTO salvaProgetto(ProgettoRequestDTO progetto) {
+        Progetto progettoSalvato = progettoRepository.save(progetto.toEntity());
+        return ProgettoResponseDTO.fromEntity(progettoSalvato);
     }
-    public Progetto modificaProgettoPerId(Long id, Progetto progetto) {
-        if (!progettoRepository.existsById(id)) {
-            return null;
+    public ProgettoResponseDTO modificaProgettoPerId(Long id, ProgettoRequestDTO progetto) {
+        Progetto p = progettoRepository.findById(id)
+                .orElseThrow(() -> new EntitaNonTrovata("Progetto con Id: " + id + " non trovato"));
+
+        if (progetto.getNome() != null) {
+            p.setNome(progetto.getNome());
+        }
+        if (progetto.getDescrizione() != null) {
+            p.setDescrizione(progetto.getDescrizione());
+        }
+        if (progetto.getStato() != null) {
+            p.setStato(progetto.getStato());
         }
 
-        Progetto nuovoProgetto = progettoRepository.findById(id).get();
-
-        if (progetto.stato.isEmpty()) {
-            nuovoProgetto.setStato(nuovoProgetto.getStato());
-        } else {
-            nuovoProgetto.setStato(progetto.getStato());
-        }
-        if (progetto.nome.isEmpty()) {
-            nuovoProgetto.setNome(nuovoProgetto.getNome());
-        } else {
-            nuovoProgetto.setNome(progetto.getNome());
-        }
-        if (progetto.descrizione.isEmpty()) {
-            nuovoProgetto.setDescrizione(nuovoProgetto.getDescrizione());
-        } else {
-            nuovoProgetto.setDescrizione(progetto.getDescrizione());
-        }
-        progettoRepository.save(nuovoProgetto);
-
-        return nuovoProgetto;
+        return ProgettoResponseDTO.fromEntity(progettoRepository.save(p));
     }
-    public void eliminaProgettoPerId(Long id){
-        if (!progettoRepository.existsById(id)) {
-            throw new RuntimeException("Progetto con ID: " + id + " non trovata nel database. Impossibile eliminare.");
+    public void eliminaProgettoPerId(Long id) {
+        Progetto p = progettoRepository.findById(id)
+                .orElseThrow(() -> new EntitaNonTrovata("Progetto con Id: " + id + " non trovato"));
+
+        if (p.getAttivita() != null && !p.getAttivita().isEmpty()) {
+            throw new IllegalStateException(
+                    "Impossibile eliminare il progetto: sono presenti " + p.getAttivita().size() + " attività collegate"
+            );
         }
+
+        if (p.getAssociati() != null && !p.getAssociati().isEmpty()) {
+            throw new IllegalStateException(
+                    "Impossibile eliminare il progetto: sono presenti " + p.getAssociati().size() + " dipendenti associati"
+            );
+        }
+
         progettoRepository.deleteById(id);
-    }}
+    }
+}

@@ -33,6 +33,8 @@ public class Associato {
         this.progetto = progetto;
     }
 
+    public Long getIdDipendenteAssociatoProgetto() {return idDipendenteAssociatoProgetto;}
+    public void setIdDipendenteAssociatoProgetto(Long id) {this.idDipendenteAssociatoProgetto = id;}
     public LocalDate getDataInizio() {return dataInizio;}
     public void setDataInizio(LocalDate dataInizio) {this.dataInizio = dataInizio;}
     public LocalDate getDataFine() {return dataFine;}

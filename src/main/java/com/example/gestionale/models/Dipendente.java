@@ -1,5 +1,6 @@
 package com.example.gestionale.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -18,12 +19,13 @@ public class Dipendente {
     public String email;
     @Column(name = "area", nullable = false, length = 50)
     public String area;
+    @JsonIgnore
     @Column(name = "password", nullable = false, length = 50)
     private String password;
 
-    @OneToMany(mappedBy = "dipendente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "dipendente")
     public List<Assegnato> assegnati;
-    @OneToMany(mappedBy = "dipendente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "dipendente")
     public List<Associato> associati;
 
     public Dipendente(){
@@ -38,7 +40,7 @@ public class Dipendente {
         this.associati = associati;
     }
 
-    public long getIdDipendente() {return idDipendente;}
+    public Long getIdDipendente() {return idDipendente;}
     public void setIdDipendente(Long idDipendente) {this.idDipendente = idDipendente;}
     public String getNome() {return nome;}
     public void setNome(String nome) {this.nome = nome;}

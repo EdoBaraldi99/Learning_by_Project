@@ -1,6 +1,9 @@
 package com.example.gestionale.services;
 
 
+import com.example.gestionale.dto.DipendenteRequestDTO;
+import com.example.gestionale.dto.DipendenteResponseDTO;
+import com.example.gestionale.exceptions.EntitaNonTrovata;
 import com.example.gestionale.models.Dipendente;
 import com.example.gestionale.repository.DipendenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,61 +15,47 @@ public class DipendenteService {
     @Autowired
     public DipendenteRepository dipendenteRepository;
 
-    public List<Dipendente> listaDipendenti() {
-        return dipendenteRepository.findAll();
+    public List<DipendenteResponseDTO> listaDipendenti() {
+        return dipendenteRepository.findAll().stream()
+                .map(DipendenteResponseDTO::fromEntity)
+                .toList();
     }
-    public Dipendente salvaDipendente(Dipendente dipendente) {
-        return dipendenteRepository.save(dipendente);
+    public DipendenteResponseDTO schedaDipendentePerId(Long id) {
+        Dipendente dipendente = dipendenteRepository.findById(id)
+                .orElseThrow(() -> new EntitaNonTrovata("Dipendente con Id: " + id + " non trovato"));
+        return DipendenteResponseDTO.fromEntity(dipendente);
     }
-    public Dipendente ottieniDipendentePerId(Long id) {
-        return dipendenteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utente con ID: " + id + " non trovato nel database"));
+    public DipendenteResponseDTO salvaDipendente(DipendenteRequestDTO dipendente) {
+        Dipendente dipendenteSalvato = dipendente.toEntity();
+       // d.setPassword(passwordEncoder.encode(d.getPassword())); // hash applicato dal Service
+        return DipendenteResponseDTO.fromEntity(dipendenteRepository.save(dipendenteSalvato));
     }
-    public Dipendente modificaDipendentePerId(Long id, Dipendente dipendente) {
-        if (!dipendenteRepository.existsById(id)) {
-            return null;
-        }
+    public DipendenteResponseDTO modificaDipendentePerId(Long id,  DipendenteRequestDTO dipendente) {
+        Dipendente d = dipendenteRepository.findById(id)
+                .orElseThrow(() -> new EntitaNonTrovata("Dipendente con Id: " + id + " non trovato"));
 
-        Dipendente nuovoDipendente = dipendenteRepository.findById(id).get();
+        if (dipendente.getNome() != null) d.setNome(dipendente.getNome());
+        if (dipendente.getCognome() != null) d.setCognome(dipendente.getCognome());
+        if (dipendente.getEmail() != null) d.setEmail(dipendente.getEmail());
+        if (dipendente.getArea() != null) d.setArea(dipendente.getArea());
 
-        if (dipendente.nome.isEmpty()) {
-            nuovoDipendente.setNome(nuovoDipendente.getNome());
-        } else {
-            nuovoDipendente.setNome(dipendente.getNome());
-        }
-        if (dipendente.cognome.isEmpty()) {
-            nuovoDipendente.setCognome(nuovoDipendente.getCognome());
-        } else {
-            nuovoDipendente.setCognome(dipendente.getCognome());
-        }
-        if (dipendente.email.isEmpty()) {
-            nuovoDipendente.setEmail(nuovoDipendente.getEmail());
-        } else {
-            nuovoDipendente.setEmail(dipendente.getEmail());
-        }
-        if (dipendente.area.isEmpty()) {
-            nuovoDipendente.setArea(nuovoDipendente.getArea());
-        } else {
-            nuovoDipendente.setArea(dipendente.getArea());
-        }
-        if (dipendente.associati.isEmpty()) {
-            nuovoDipendente.setAssociati(nuovoDipendente.getAssociati());
-        } else {
-            nuovoDipendente.setAssociati(dipendente.getAssociati());
-        }
-        if (dipendente.assegnati.isEmpty()) {
-            nuovoDipendente.setAssegnati(nuovoDipendente.getAssegnati());
-        } else {
-            nuovoDipendente.setAssegnati(dipendente.getAssegnati());
-        }
-        dipendenteRepository.save(nuovoDipendente);
-
-        return nuovoDipendente;
+        return DipendenteResponseDTO.fromEntity(dipendenteRepository.save(d));
     }
     public void eliminaDipendentePerId(Long id) {
-        if (!dipendenteRepository.existsById(id)) {
-            throw new RuntimeException("Dipendente con ID: " + id + " non trovata nel database. Impossibile eliminare.");
+        Dipendente d = dipendenteRepository.findById(id)
+                .orElseThrow(() -> new EntitaNonTrovata("Dipendente con Id: " + id + " non trovato"));
+
+        if (d.getAssegnati() != null && !d.getAssegnati().isEmpty()) {
+            throw new IllegalStateException(
+                    "Impossibile eliminare il dipendente: ha ancora " + d.getAssegnati().size() + " task assegnati"
+            );
         }
+        if (d.getAssociati() != null && !d.getAssociati().isEmpty()) {
+            throw new IllegalStateException(
+                    "Impossibile eliminare il dipendente: è ancora associato a " + d.getAssociati().size() + " progetti"
+            );
+        }
+
         dipendenteRepository.deleteById(id);
     }
 }
