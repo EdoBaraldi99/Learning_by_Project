@@ -8,22 +8,18 @@ public class StoricoResponseDTO {
     private LocalDate data;
     private String descrizione;
     private String tempoLavorato;
-    private Long idTask;
-    private String titoloTask;
+
+    private AttivitaRefDTO attivita;
 
     public StoricoResponseDTO() {
     }
-
     public static StoricoResponseDTO fromEntity(Storico s) {
         StoricoResponseDTO dto = new StoricoResponseDTO();
         dto.idStorico = s.getIdStorico();
         dto.data = s.getData();
         dto.descrizione = s.getDescrizione();
         dto.tempoLavorato = s.getTempoLavorato();
-        if (s.getAttivita() != null) {
-            dto.idTask = s.getAttivita().getIdTask();
-            dto.titoloTask = s.getAttivita().getTitolo();
-        }
+        dto.attivita = AttivitaRefDTO.fromEntity(s.getAttivita());
         return dto;
     }
 
@@ -35,8 +31,6 @@ public class StoricoResponseDTO {
     public void setDescrizione(String descrizione) {this.descrizione = descrizione;}
     public String getTempoLavorato() {return tempoLavorato;}
     public void setTempoLavorato(String tempoLavorato) {this.tempoLavorato = tempoLavorato;}
-    public Long getIdTask() {return idTask;}
-    public void setIdTask(Long idTask) {this.idTask = idTask;}
-    public String getTitoloTask() {return titoloTask;}
-    public void setTitoloTask(String titoloTask) {this.titoloTask = titoloTask;}
+    public AttivitaRefDTO getAttivita() {return attivita;}
+    public void setAttivita(AttivitaRefDTO attivita) {this.attivita = attivita;}
 }

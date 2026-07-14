@@ -32,7 +32,7 @@ public class AttivitaController {
         return ResponseEntity.ok(attivitaService.modificaAttivitaPerId(id, attivita));
     }
     @DeleteMapping("/elimina/{id}")
-    public ResponseEntity<String> eliminaprogettoPerId(@PathVariable("id") Long id){
+    public ResponseEntity<String> eliminaAttivitaPerId(@PathVariable("id") Long id){
         attivitaService.eliminaAttivitaPerId(id);
         return ResponseEntity.noContent().build();
     }

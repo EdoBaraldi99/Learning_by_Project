@@ -27,7 +27,7 @@ public class DipendenteService {
     }
     public DipendenteResponseDTO salvaDipendente(DipendenteRequestDTO dipendente) {
         Dipendente dipendenteSalvato = dipendente.toEntity();
-       // d.setPassword(passwordEncoder.encode(d.getPassword())); // hash applicato dal Service
+        //dipendente.setPassword(passwordEncoder.encode(dipendente.getPassword())); // hash applicato dal Service
         return DipendenteResponseDTO.fromEntity(dipendenteRepository.save(dipendenteSalvato));
     }
     public DipendenteResponseDTO modificaDipendentePerId(Long id,  DipendenteRequestDTO dipendente) {

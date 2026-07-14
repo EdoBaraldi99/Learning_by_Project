@@ -10,12 +10,8 @@ public class AssegnatoResponseDTO {
     private LocalDate dataFine;
     private String ruolo;
 
-    private Long idDipendente;
-    private String nomeDipendente;
-    private String cognomeDipendente;
-
-    private Long idAttivita;
-    private String titoloAttivita;
+    private DipendenteRefDTO dipendente;
+    private AttivitaRefDTO attivita;
 
     public AssegnatoResponseDTO() {
     }
@@ -26,15 +22,8 @@ public class AssegnatoResponseDTO {
         dto.dataInizio = a.getDataInizioAttivita();
         dto.dataFine = a.getDataFineAttivita();
         dto.ruolo = a.getRuolo();
-        if (a.getDipendente() != null) {
-            dto.idDipendente = a.getDipendente().getIdDipendente();
-            dto.nomeDipendente = a.getDipendente().getNome();
-            dto.cognomeDipendente = a.getDipendente().getCognome();
-        }
-        if (a.getAttivita() != null) {
-            dto.idAttivita = a.getAttivita().getIdTask();
-            dto.titoloAttivita = a.getAttivita().getTitolo();
-        }
+        dto.dipendente = DipendenteRefDTO.fromEntity(a.getDipendente());
+        dto.attivita = AttivitaRefDTO.fromEntity(a.getAttivita());
         return dto;
     }
 
@@ -46,14 +35,8 @@ public class AssegnatoResponseDTO {
     public void setDataFine(LocalDate dataFine) {this.dataFine = dataFine;}
     public String getRuolo() {return ruolo;}
     public void setRuolo(String ruolo) {this.ruolo = ruolo;}
-    public Long getIdDipendente() {return idDipendente;}
-    public void setIdDipendente(Long idDipendente) {this.idDipendente = idDipendente;}
-    public String getNomeDipendente() {return nomeDipendente;}
-    public void setNomeDipendente(String nomeDipendente) {this.nomeDipendente = nomeDipendente;}
-    public String getCognomeDipendente() {return cognomeDipendente;}
-    public void setCognomeDipendente(String cognomeDipendente) {this.cognomeDipendente = cognomeDipendente;}
-    public Long getIdAttivita() {return idAttivita;}
-    public void setIdAttivita(Long idAttivita) {this.idAttivita = idAttivita;}
-    public String getTitoloAttivita() {return titoloAttivita;}
-    public void setTitoloAttivita(String titoloAttivita) {this.titoloAttivita = titoloAttivita;}
+    public DipendenteRefDTO getDipendente() {return dipendente;}
+    public void setDipendente(DipendenteRefDTO dipendente) {this.dipendente = dipendente;}
+    public AttivitaRefDTO getAttivita() {return attivita;}
+    public void setAttivita(AttivitaRefDTO attivita) {this.attivita = attivita;}
 }

@@ -10,12 +10,8 @@ public class AssociatoResponseDTO {
     private LocalDate dataFine;
     private String ruolo;
 
-    private Long idDipendente;
-    private String nomeDipendente;
-    private String cognomeDipendente;
-
-    private Long idProgetto;
-    private String nomeProgetto;
+    private DipendenteRefDTO dipendente;
+    private ProgettoRefDTO progetto;
 
     public AssociatoResponseDTO() {
     }
@@ -26,15 +22,8 @@ public class AssociatoResponseDTO {
         dto.dataInizio = a.getDataInizio();
         dto.dataFine = a.getDataFine();
         dto.ruolo = a.getRuolo();
-        if (a.getDipendente() != null) {
-            dto.idDipendente = a.getDipendente().getIdDipendente();
-            dto.nomeDipendente = a.getDipendente().getNome();
-            dto.cognomeDipendente = a.getDipendente().getCognome();
-        }
-        if (a.getProgetto() != null) {
-            dto.idProgetto = a.getProgetto().getIdProgetto();
-            dto.nomeProgetto = a.getProgetto().getNome();
-        }
+        dto.dipendente = DipendenteRefDTO.fromEntity(a.getDipendente());
+        dto.progetto = ProgettoRefDTO.fromEntity(a.getProgetto());
         return dto;
     }
 
@@ -46,14 +35,8 @@ public class AssociatoResponseDTO {
     public void setDataFine(LocalDate dataFine) {this.dataFine = dataFine;}
     public String getRuolo() {return ruolo;}
     public void setRuolo(String ruolo) {this.ruolo = ruolo;}
-    public Long getIdDipendente() {return idDipendente;}
-    public void setIdDipendente(Long idDipendente) {this.idDipendente = idDipendente;}
-    public String getNomeDipendente() {return nomeDipendente;}
-    public void setNomeDipendente(String nomeDipendente) {this.nomeDipendente = nomeDipendente;}
-    public String getCognomeDipendente() {return cognomeDipendente;}
-    public void setCognomeDipendente(String cognomeDipendente) {this.cognomeDipendente = cognomeDipendente;}
-    public Long getIdProgetto() {return idProgetto;}
-    public void setIdProgetto(Long idProgetto) {this.idProgetto = idProgetto;}
-    public String getNomeProgetto() {return nomeProgetto;}
-    public void setNomeProgetto(String nomeProgetto) {this.nomeProgetto = nomeProgetto;}
+    public ProgettoRefDTO getProgetto() {return progetto;}
+    public void setProgetto(ProgettoRefDTO progetto) {this.progetto = progetto;}
+    public DipendenteRefDTO getDipendente() {return dipendente;}
+    public void setDipendente(DipendenteRefDTO dipendente) {this.dipendente = dipendente;}
 }

@@ -18,11 +18,9 @@ public class AttivitaResponseDTO {
     private String tipologia;
     private String priorita;
 
-    private Long idProgetto;
-    private String nomeProgetto;
-
-    private List<Long> storicoIds;
-    private List<Long> assegnatiIds;
+    private ProgettoRefDTO progetto;
+    private List<StoricoResponseDTO> storico;
+    private List<AssegnatoResponseDTO> assegnati;
 
     public AttivitaResponseDTO() {
     }
@@ -38,17 +36,12 @@ public class AttivitaResponseDTO {
         dto.stato = a.getStato();
         dto.tipologia = a.getTipologia();
         dto.priorita = a.getPriorita();
-        if (a.getProgetto() != null) {
-            dto.idProgetto = a.getProgetto().getIdProgetto();
-            dto.nomeProgetto = a.getProgetto().getNome();
-        }
+        dto.progetto = ProgettoRefDTO.fromEntity(a.getProgetto());
         if (a.getStorico() != null) {
-            dto.storicoIds = a.getStorico().stream().map(Storico::getIdStorico).toList();
+            dto.storico = a.getStorico().stream().map(StoricoResponseDTO::fromEntity).toList();
         }
         if (a.getAssegnati() != null) {
-            dto.assegnatiIds = a.getAssegnati().stream()
-                    .map(Assegnato::getIdDipendenteAssegnaTask)
-                    .toList();
+            dto.assegnati = a.getAssegnati().stream().map(AssegnatoResponseDTO::fromEntity).toList();
         }
         return dto;
     }
@@ -71,12 +64,10 @@ public class AttivitaResponseDTO {
     public void setTipologia(String tipologia) {this.tipologia = tipologia;}
     public String getPriorita() {return priorita;}
     public void setPriorita(String priorita) {this.priorita = priorita;}
-    public Long getIdProgetto() {return idProgetto;}
-    public void setIdProgetto(Long idProgetto) {this.idProgetto = idProgetto;}
-    public String getNomeProgetto() {return nomeProgetto;}
-    public void setNomeProgetto(String nomeProgetto) {this.nomeProgetto = nomeProgetto;}
-    public List<Long> getStoricoIds() {return storicoIds;}
-    public void setStoricoIds(List<Long> storicoIds) {this.storicoIds = storicoIds;}
-    public List<Long> getAssegnatiIds() {return assegnatiIds;}
-    public void setAssegnatiIds(List<Long> assegnatiIds) {this.assegnatiIds = assegnatiIds;}
+    public ProgettoRefDTO getProgetto() {return progetto;}
+    public void setProgetto(ProgettoRefDTO progetto) {this.progetto = progetto;}
+    public List<StoricoResponseDTO> getStorico() {return storico;}
+    public void setStorico(List<StoricoResponseDTO> storico) {this.storico = storico;}
+    public List<AssegnatoResponseDTO> getAssegnati() {return assegnati;}
+    public void setAssegnati(List<AssegnatoResponseDTO> assegnati) {this.assegnati = assegnati;}
 }

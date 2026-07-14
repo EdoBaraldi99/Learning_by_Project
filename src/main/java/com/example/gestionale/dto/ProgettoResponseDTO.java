@@ -11,8 +11,8 @@ public class ProgettoResponseDTO {
     private String descrizione;
     private String stato;
 
-    private List<Long> attivitaIds;
-    private List<Long> associatiIds;
+    private List<AttivitaResponseDTO> attivita;
+    private List<AssociatoResponseDTO> associati;
 
     public ProgettoResponseDTO() {
     }
@@ -31,12 +31,10 @@ public class ProgettoResponseDTO {
         dto.descrizione = p.getDescrizione();
         dto.stato = p.getStato();
         if (p.getAttivita() != null) {
-            dto.attivitaIds = p.getAttivita().stream().map(Attivita::getIdTask).toList();
+            dto.attivita = p.getAttivita().stream().map(AttivitaResponseDTO::fromEntity).toList();
         }
         if (p.getAssociati() != null) {
-            dto.associatiIds = p.getAssociati().stream()
-                    .map(Associato::getIdDipendenteAssociatoProgetto)
-                    .toList();
+            dto.associati = p.getAssociati().stream().map(AssociatoResponseDTO::fromEntity).toList();
         }
         return dto;
     }
@@ -49,8 +47,8 @@ public class ProgettoResponseDTO {
     public void setDescrizione(String descrizione) {this.descrizione = descrizione;}
     public String getStato() {return stato;}
     public void setStato(String stato) {this.stato = stato;}
-    public List<Long> getAttivitaIds() {return attivitaIds;}
-    public void setAttivitaIds(List<Long> attivitaIds) {this.attivitaIds = attivitaIds;}
-    public List<Long> getAssociatiIds() {return associatiIds;}
-    public void setAssociatiIds(List<Long> associatiIds) {this.associatiIds = associatiIds;}
+    public List<AttivitaResponseDTO> getAttivita() {return attivita;}
+    public void setAttivita(List<AttivitaResponseDTO> attivita) {this.attivita = attivita;}
+    public List<AssociatoResponseDTO> getAssociati() {return associati;}
+    public void setAssociati(List<AssociatoResponseDTO> associati) {this.associati = associati;}
 }
