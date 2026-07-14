@@ -11,7 +11,6 @@ public class AssegnatoResponseDTO {
     private String ruolo;
 
     private DipendenteRefDTO dipendente;
-    private AttivitaRefDTO attivita;
 
     public AssegnatoResponseDTO() {
     }
@@ -23,7 +22,6 @@ public class AssegnatoResponseDTO {
         dto.dataFine = a.getDataFineAttivita();
         dto.ruolo = a.getRuolo();
         dto.dipendente = DipendenteRefDTO.fromEntity(a.getDipendente());
-        dto.attivita = AttivitaRefDTO.fromEntity(a.getAttivita());
         return dto;
     }
 
@@ -37,6 +35,4 @@ public class AssegnatoResponseDTO {
     public void setRuolo(String ruolo) {this.ruolo = ruolo;}
     public DipendenteRefDTO getDipendente() {return dipendente;}
     public void setDipendente(DipendenteRefDTO dipendente) {this.dipendente = dipendente;}
-    public AttivitaRefDTO getAttivita() {return attivita;}
-    public void setAttivita(AttivitaRefDTO attivita) {this.attivita = attivita;}
 }
