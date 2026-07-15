@@ -2,14 +2,13 @@ package com.example.gestionale.services;
 
 import com.example.gestionale.dto.*;
 import com.example.gestionale.models.*;
-import com.example.gestionale.repository.AssociatoRepository;
-import com.example.gestionale.repository.DipendenteRepository;
-import com.example.gestionale.repository.ProgettoRepository;
+import com.example.gestionale.repositories.AssociatoRepository;
+import com.example.gestionale.repositories.DipendenteRepository;
+import com.example.gestionale.repositories.ProgettoRepository;
 import com.example.gestionale.exceptions.EntitaNonTrovata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -32,20 +31,20 @@ public class AssociatoService {
         return AssociatoResponseDTO.fromEntity(associato);
     }
     public AssociatoResponseDTO associaDipendenteProgetto(AssociatoRequestDTO associato){
-        Dipendente dipendente = dipendenteRepository.findById(associato.getIdDipendente())
-                .orElseThrow(() -> new EntitaNonTrovata("Dipendente con Id: " + associato.getIdDipendente() + " non trovato"));
-        Progetto progetto = progettoRepository.findById(associato.getIdProgetto())
-                .orElseThrow(() -> new EntitaNonTrovata("Progetto con Id: " + associato.getIdProgetto() + " non trovato"));
+            Dipendente dipendente = dipendenteRepository.findById(associato.getIdDipendente())
+                    .orElseThrow(() -> new EntitaNonTrovata("Dipendente con Id: " + associato.getIdDipendente() + " non trovato"));
+            Progetto progetto = progettoRepository.findById(associato.getIdProgetto())
+                    .orElseThrow(() -> new EntitaNonTrovata("Progetto con Id: " + associato.getIdProgetto() + " non trovato"));
 
-        Associato associatoSalvato = associato.toEntity();
-        associatoSalvato.setDipendente(dipendente);
-        associatoSalvato.setProgetto(progetto);
+            Associato associatoSalvato = associato.toEntity();
+            associatoSalvato.setDipendente(dipendente);
+            associatoSalvato.setProgetto(progetto);
 
-        return AssociatoResponseDTO.fromEntity(associatoRepository.save(associatoSalvato));
+            return AssociatoResponseDTO.fromEntity(associatoRepository.save(associatoSalvato));
     }
     public AssociatoResponseDTO modificaAssociazione(Long id, AssociatoRequestDTO associato) {
         Associato a = associatoRepository.findById(id)
-                .orElseThrow(() -> new EntitaNonTrovata("Assegnazione con Id: " + id + " non trovata"));
+                .orElseThrow(() -> new EntitaNonTrovata("Associazionene con Id: " + id + " non trovata"));
 
         if (associato.getDataInizio() != null) a.setDataInizio(associato.getDataInizio());
         if (associato.getDataFine() != null) a.setDataFine(associato.getDataFine());

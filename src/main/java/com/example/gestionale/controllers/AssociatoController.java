@@ -7,6 +7,7 @@ import com.example.gestionale.services.AssociatoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -27,6 +28,7 @@ public class AssociatoController {
         return ResponseEntity.ok(associatoService.schedaAssociatoPerId(id));
     }
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or " + "(@progettoAuthService.isCapoProgetto(#request.idProgetto, authentication) " + "and #request.ruolo == 'MEMBRO')")
     public ResponseEntity<AssociatoResponseDTO> associaDipendenteProgetto(@RequestBody AssociatoRequestDTO associato) {
         AssociatoResponseDTO creato = associatoService.associaDipendenteProgetto(associato);
         return ResponseEntity.status(201).body(creato);

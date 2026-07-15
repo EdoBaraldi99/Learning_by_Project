@@ -12,6 +12,7 @@ public class DipendenteResponseDTO {
     private String cognome;
     private String email;
     private String area;
+    private Boolean isAdmin;
     // niente password
 
     private List<Long> assegnatiIds;

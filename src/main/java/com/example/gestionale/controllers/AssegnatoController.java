@@ -6,6 +6,7 @@ import com.example.gestionale.services.AssegnatoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -26,15 +27,18 @@ public class AssegnatoController {
         return ResponseEntity.ok(assegnatoService.schedaAssegnatoPerId(id));
     }
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or @progettoAuthService.isCapoProgettoDiAttivita(#request.idAttivita, authentication)")
     public ResponseEntity<AssegnatoResponseDTO> assegnaDipendenteAttivita(@RequestBody AssegnatoRequestDTO assegnato) {
         AssegnatoResponseDTO creato = assegnatoService.assegnaDipendenteAttivita(assegnato);
         return ResponseEntity.status(201).body(creato);
     }
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or " + "(@progettoAuthService.isCapoProgettoDiAssegnato(#id, authentication) " + "and (#request.idAttivita == null or @projectAuthService.isCapoProgettoDiAttivita(#request.idAttivita, authentication)))")
     public ResponseEntity<AssegnatoResponseDTO> modificaAssegnazione(@PathVariable Long id, @RequestBody AssegnatoRequestDTO assegnato) {
         return ResponseEntity.ok(assegnatoService.modificaAssegnazione(id, assegnato));
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @progettoAuthService.isCapoProgettoDiAssegnato(#id, authentication)")
     public ResponseEntity<Void> eliminaAssegnazione(@PathVariable Long id) {
         assegnatoService.eliminaAssegnazione(id);
         return ResponseEntity.noContent().build();

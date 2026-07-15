@@ -2,15 +2,13 @@ package com.example.gestionale.services;
 
 import com.example.gestionale.dto.AssegnatoRequestDTO;
 import com.example.gestionale.dto.AssegnatoResponseDTO;
-import com.example.gestionale.dto.AssociatoResponseDTO;
 import com.example.gestionale.exceptions.EntitaNonTrovata;
 import com.example.gestionale.models.Assegnato;
-import com.example.gestionale.models.Associato;
 import com.example.gestionale.models.Attivita;
 import com.example.gestionale.models.Dipendente;
-import com.example.gestionale.repository.AssegnatoRepository;
-import com.example.gestionale.repository.AttivitaRepository;
-import com.example.gestionale.repository.DipendenteRepository;
+import com.example.gestionale.repositories.AssegnatoRepository;
+import com.example.gestionale.repositories.AttivitaRepository;
+import com.example.gestionale.repositories.DipendenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

@@ -1,10 +1,12 @@
 package com.example.gestionale.controllers;
 
+import com.example.gestionale.dto.CambioRuoloAdminDTO;
 import com.example.gestionale.dto.DipendenteRequestDTO;
 import com.example.gestionale.dto.DipendenteResponseDTO;
 import com.example.gestionale.services.DipendenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class DipendenteController {
         return ResponseEntity.ok(dipendenteService.schedaDipendentePerId(id));
     }
     @PatchMapping("/modifica/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.idDipendente")
     public ResponseEntity<DipendenteResponseDTO> modificaDipendentePerId(@PathVariable("id") Long id, @RequestBody DipendenteRequestDTO dipendente){
         return ResponseEntity.ok(dipendenteService.modificaDipendentePerId(id, dipendente));
     }
@@ -35,5 +38,10 @@ public class DipendenteController {
     public ResponseEntity<String> eliminaDipendentePerId(@PathVariable("id") Long id){
         dipendenteService.eliminaDipendentePerId(id);
         return ResponseEntity.noContent().build();
+    }
+    @PatchMapping("/{id}/ruolo-admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<DipendenteResponseDTO> cambiaRuoloAdmin(@PathVariable Long id, @RequestBody CambioRuoloAdminDTO cambioRuolo) {
+        return ResponseEntity.ok(dipendenteService.cambiaRuoloAdmin(id, cambioRuolo));
     }
 }

@@ -4,7 +4,7 @@ package com.example.gestionale.services;
 import com.example.gestionale.dto.ProgettoRequestDTO;
 import com.example.gestionale.dto.ProgettoResponseDTO;
 import com.example.gestionale.models.Progetto;
-import com.example.gestionale.repository.ProgettoRepository;
+import com.example.gestionale.repositories.ProgettoRepository;
 import com.example.gestionale.exceptions.EntitaNonTrovata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

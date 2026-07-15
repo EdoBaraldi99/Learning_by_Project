@@ -7,7 +7,7 @@ public class DipendenteRequestDTO {
     private String cognome;
     private String email;
     private String area;
-    private String password; // in chiaro, verrà hashata nel Service
+    private String password;// in chiaro, verrà hashata nel Service
 
     public DipendenteRequestDTO() {
     }

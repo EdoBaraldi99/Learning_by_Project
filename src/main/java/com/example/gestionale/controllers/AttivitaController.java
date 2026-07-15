@@ -5,6 +5,7 @@ import com.example.gestionale.dto.AttivitaResponseDTO;
 import com.example.gestionale.services.AttivitaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class AttivitaController {
         return ResponseEntity.ok(attivitaService.listaAttivita());
     }
     @PostMapping("/crea")
+    @PreAuthorize("hasRole('ADMIN') or @progettoAuthService.isCapoProgetto(#request.idProgetto, authentication)")
     public ResponseEntity<AttivitaResponseDTO> creaAttivita(@RequestBody AttivitaRequestDTO attivita){
         return ResponseEntity.status(201).body(attivitaService.salvaAttivita(attivita));
     }
@@ -28,10 +30,12 @@ public class AttivitaController {
         return ResponseEntity.ok(attivitaService.schedaAttivitaPerId(id));
     }
     @PatchMapping("/modifica/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @progettoAuthService.isCapoProgetto(#request.idProgetto, authentication)")
     public ResponseEntity<AttivitaResponseDTO> modificaAttivitaPerId(@PathVariable("id") Long id, @RequestBody AttivitaRequestDTO attivita){
         return ResponseEntity.ok(attivitaService.modificaAttivitaPerId(id, attivita));
     }
     @DeleteMapping("/elimina/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @progettoAuthService.isCapoProgetto(#request.idProgetto, authentication)")
     public ResponseEntity<String> eliminaAttivitaPerId(@PathVariable("id") Long id){
         attivitaService.eliminaAttivitaPerId(id);
         return ResponseEntity.noContent().build();
