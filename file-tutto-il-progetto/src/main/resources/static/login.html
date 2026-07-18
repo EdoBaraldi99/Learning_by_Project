@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accedi – Gestione e monitoraggio</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+<main class="login-page">
+    <div class="login-card">
+        <button class="login-lang" type="button" aria-label="Cambia lingua">
+            <svg class="login-lang__icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                    d="M8 14.667C11.682 14.667 14.667 11.682 14.667 8C14.667 4.318 11.682 1.333 8 1.333C4.318 1.333 1.333 4.318 1.333 8C1.333 11.682 4.318 14.667 8 14.667Z"
+                    stroke="currentColor" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"
+                />
+                <path
+                    d="M5.333 8C5.333 5.518 6.288 3.131 8 1.333C9.712 3.131 10.667 5.518 10.667 8C10.667 10.482 9.712 12.869 8 14.667C6.288 12.869 5.333 10.482 5.333 8Z"
+                    stroke="currentColor" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"
+                />
+                <path d="M1.333 8H14.667" stroke="currentColor" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="login-lang__flag">
+                <svg viewBox="0 0 3 2" width="16" height="12" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="1" height="2" x="0" fill="#009246" />
+                    <rect width="1" height="2" x="1" fill="#F1F2F1" />
+                    <rect width="1" height="2" x="2" fill="#CE2B37" />
+                </svg>
+            </span>
+            <span>Italiano</span>
+        </button>
+
+        <div class="login-avatar">TS</div>
+        <h1 class="login-brand-title">TesiSquare</h1>
+        <p class="login-subtitle" data-i18n="login.title">Accedi</p>
+
+        <form id="login-form" novalidate>
+            <div class="form-group">
+                <label class="form-label" for="login-email" data-i18n="field.email">Email</label>
+                <input class="form-input" type="email" id="login-email" placeholder="email@azienda.it" data-i18n-placeholder="login.emailPlaceholder" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="login-password" data-i18n="field.password">Password</label>
+                <div class="password-field">
+                    <input class="form-input" type="password" id="login-password" placeholder="Password" required autocomplete="current-password">
+                    <button class="password-toggle" type="button" id="login-password-toggle" aria-label="Mostra password" aria-pressed="false">
+                        <svg class="password-toggle__icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/>
+                            <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.147.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <p class="form-error" id="login-form-error" hidden></p>
+
+            <button class="btn-login" type="submit" id="login-submit-btn" data-i18n="login.submit">Accedi</button>
+            <p class="login-secondary-link"><a href="password-dimenticata.html" data-i18n="login.forgotPassword">Password dimenticata?</a></p>
+        </form>
+    </div>
+</main>
+
+<script src="i18n.js" defer></script>
+<script src="session.js" defer></script>
+<script src="login.js" defer></script>
+</body>
+</html>
