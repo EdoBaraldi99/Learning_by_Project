@@ -1,2 +1,2 @@
 # Learning_by_Project
-lo sapete già
+Progetto Gestionale
