@@ -66,8 +66,8 @@
             tasksTotal,
             teamMembers: teamCountByProject.get(raw.idProgetto) ?? null,
             manager: teamLeaderByProject.get(raw.idProgetto) || null,
-            startDate: null,
-            endDate: null
+            startDate: raw.dataInizio || null,
+            endDate: raw.dataFine || null
         };
     }
 
@@ -144,7 +144,10 @@
         const res = await Session.authFetch(`${BASE_URL}/progetti/crea`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nome: payload.nome, descrizione: payload.descrizione, stato: payload.stato })
+            body: JSON.stringify({
+                nome: payload.nome, descrizione: payload.descrizione, stato: payload.stato,
+                dataInizio: payload.dataInizio || null, dataFine: payload.dataFine || null
+            })
         });
         if (!res.ok) throw new Error(await parseErrorMessage(res, `Errore API: ${res.status}`));
         const project = await res.json();
@@ -317,6 +320,8 @@
     function openCreateModal() {
         document.getElementById('create-form').reset();
         document.getElementById('create-form-error').hidden = true;
+        document.getElementById('create-manager-search').value = '';
+        document.getElementById('create-members-search').value = '';
         renderRadioList('create-manager', allDipendenti, () => false, d => d.idDipendente, d => `${d.nome} ${d.cognome}`, d => d.area);
         renderChecklist('create-members', allDipendenti, () => false, d => d.idDipendente, d => `${d.nome} ${d.cognome}`, d => d.area);
         document.getElementById('create-modal-overlay').hidden = false;
@@ -336,6 +341,8 @@
             nome: document.getElementById('create-nome').value.trim(),
             descrizione: document.getElementById('create-desc').value.trim(),
             stato: document.getElementById('create-stato').value,
+            dataInizio: document.getElementById('create-data-inizio').value || null,
+            dataFine: document.getElementById('create-data-fine').value || null,
             teamLeaderId: getRadioValue('create-manager'),
             memberIds: getCheckedValues('create-members')
         };
@@ -433,6 +440,9 @@
         await Promise.all([loadUser(), loadReferenceData(), loadProjects(projectParam)]);
         searchInput.addEventListener('input', onSearch);
         document.getElementById('logout-btn').addEventListener('click', Session.logout);
+
+        setupChecklistSearch('create-manager-search', 'create-manager');
+        setupChecklistSearch('create-members-search', 'create-members');
 
         document.getElementById('new-project-btn').addEventListener('click', openCreateModal);
         document.getElementById('create-modal-close-btn').addEventListener('click', closeCreateModal);

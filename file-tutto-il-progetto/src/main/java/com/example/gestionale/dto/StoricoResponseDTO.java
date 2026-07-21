@@ -10,6 +10,7 @@ public class StoricoResponseDTO {
     private String tempoLavorato;
 
     private AttivitaRefDTO attivita;
+    private DipendenteRefDTO dipendente;
 
     public StoricoResponseDTO() {
     }
@@ -20,6 +21,7 @@ public class StoricoResponseDTO {
         dto.descrizione = s.getDescrizione();
         dto.tempoLavorato = s.getTempoLavorato();
         dto.attivita = AttivitaRefDTO.fromEntity(s.getAttivita());
+        dto.dipendente = DipendenteRefDTO.fromEntity(s.getDipendente());
         return dto;
     }
 
@@ -33,4 +35,6 @@ public class StoricoResponseDTO {
     public void setTempoLavorato(String tempoLavorato) {this.tempoLavorato = tempoLavorato;}
     public AttivitaRefDTO getAttivita() {return attivita;}
     public void setAttivita(AttivitaRefDTO attivita) {this.attivita = attivita;}
+    public DipendenteRefDTO getDipendente() {return dipendente;}
+    public void setDipendente(DipendenteRefDTO dipendente) {this.dipendente = dipendente;}
 }

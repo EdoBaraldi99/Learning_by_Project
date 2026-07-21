@@ -60,6 +60,7 @@ const I18N_STRINGS = {
         'common.errorApi': 'Errore API: {status}',
         'common.showPassword': 'Mostra password', 'common.hidePassword': 'Nascondi password',
         'common.statistics': 'Statistiche',
+        'common.days': 'Giorni', 'common.searchMembers': 'Cerca membri…',
 
         'status.completato': 'Completato', 'status.inCorso': 'In corso', 'status.daIniziare': 'Da iniziare',
         'status.inPausa': 'In pausa', 'status.bloccato': 'Bloccato', 'status.daFare': 'Da fare',
@@ -77,6 +78,7 @@ const I18N_STRINGS = {
         'field.nome': 'Nome', 'field.descrizione': 'Descrizione', 'field.stato': 'Stato',
         'field.teamLeader': 'Team Leader', 'field.membriTeam': 'Membri del team', 'field.titolo': 'Titolo',
         'field.priorita': 'Priorità', 'field.tipologia': 'Tipologia', 'field.tempoStimatoMin': 'Tempo stimato (min)',
+        'field.tempoStimato': 'Tempo stimato',
         'field.scadenza': 'Scadenza', 'field.assegnatoA': 'Assegnato a', 'field.email': 'Email',
         'field.password': 'Password', 'field.area': 'Area', 'field.progetto': 'Progetto', 'field.data': 'Data',
         'field.task': 'Task',
@@ -168,7 +170,7 @@ const I18N_STRINGS = {
 
         'report.titleAnalytics': 'Analisi', 'report.subtitleAnalytics': 'Analisi e reportistica avanzata',
         'report.titlePersonal': 'Storico', 'report.subtitlePersonal': 'Tieni traccia di ciò che hai fatto ogni giorno',
-        'report.newEntry': 'Nuova voce', 'report.export': 'Esporta', 'report.project': 'Progetto',
+        'report.newEntry': 'Nuova voce', 'report.editEntry': 'Modifica voce', 'report.export': 'Esporta', 'report.project': 'Progetto',
         'report.statsAria': 'Statistiche report', 'report.entriesAria': 'Voci di report',
         'report.distribuzionePerStato': 'Distribuzione per Stato', 'report.distribuzionePerPriorita': 'Distribuzione per Priorità',
         'report.attivitaPerProgetto': 'Attività per Progetto', 'report.noDataAvailable': 'Nessun dato disponibile.',
@@ -201,6 +203,7 @@ const I18N_STRINGS = {
         'common.errorApi': 'API error: {status}',
         'common.showPassword': 'Show password', 'common.hidePassword': 'Hide password',
         'common.statistics': 'Statistics',
+        'common.days': 'Days', 'common.searchMembers': 'Search members…',
 
         'status.completato': 'Completed', 'status.inCorso': 'In progress', 'status.daIniziare': 'To do',
         'status.inPausa': 'On hold', 'status.bloccato': 'Blocked', 'status.daFare': 'To do',
@@ -218,6 +221,7 @@ const I18N_STRINGS = {
         'field.nome': 'Name', 'field.descrizione': 'Description', 'field.stato': 'Status',
         'field.teamLeader': 'Team Leader', 'field.membriTeam': 'Team members', 'field.titolo': 'Title',
         'field.priorita': 'Priority', 'field.tipologia': 'Category', 'field.tempoStimatoMin': 'Estimated time (min)',
+        'field.tempoStimato': 'Estimated time',
         'field.scadenza': 'Due date', 'field.assegnatoA': 'Assigned to', 'field.email': 'Email',
         'field.password': 'Password', 'field.area': 'Department', 'field.progetto': 'Project', 'field.data': 'Date',
         'field.task': 'Task',
@@ -309,7 +313,7 @@ const I18N_STRINGS = {
 
         'report.titleAnalytics': 'Analytics', 'report.subtitleAnalytics': 'Advanced analytics and reporting',
         'report.titlePersonal': 'History', 'report.subtitlePersonal': 'Keep track of what you did each day',
-        'report.newEntry': 'New entry', 'report.export': 'Export', 'report.project': 'Project',
+        'report.newEntry': 'New entry', 'report.editEntry': 'Edit entry', 'report.export': 'Export', 'report.project': 'Project',
         'report.statsAria': 'Report statistics', 'report.entriesAria': 'Report entries',
         'report.distribuzionePerStato': 'Distribution by Status', 'report.distribuzionePerPriorita': 'Distribution by Priority',
         'report.attivitaPerProgetto': 'Tasks per Project', 'report.noDataAvailable': 'No data available.',
@@ -342,6 +346,7 @@ const I18N_STRINGS = {
         'common.errorApi': 'Erreur API : {status}',
         'common.showPassword': 'Afficher le mot de passe', 'common.hidePassword': 'Masquer le mot de passe',
         'common.statistics': 'Statistiques',
+        'common.days': 'Jours', 'common.searchMembers': 'Rechercher des membres…',
 
         'status.completato': 'Terminé', 'status.inCorso': 'En cours', 'status.daIniziare': 'À commencer',
         'status.inPausa': 'En pause', 'status.bloccato': 'Bloqué', 'status.daFare': 'À faire',
@@ -359,6 +364,7 @@ const I18N_STRINGS = {
         'field.nome': 'Nom', 'field.descrizione': 'Description', 'field.stato': 'Statut',
         'field.teamLeader': 'Chef de projet', 'field.membriTeam': "Membres de l'équipe", 'field.titolo': 'Titre',
         'field.priorita': 'Priorité', 'field.tipologia': 'Catégorie', 'field.tempoStimatoMin': 'Temps estimé (min)',
+        'field.tempoStimato': 'Temps estimé',
         'field.scadenza': 'Échéance', 'field.assegnatoA': 'Assigné à', 'field.email': 'Email',
         'field.password': 'Mot de passe', 'field.area': 'Service', 'field.progetto': 'Projet', 'field.data': 'Date',
         'field.task': 'Tâche',
@@ -450,7 +456,7 @@ const I18N_STRINGS = {
 
         'report.titleAnalytics': 'Analyses', 'report.subtitleAnalytics': 'Analyses et rapports avancés',
         'report.titlePersonal': 'Historique', 'report.subtitlePersonal': 'Suivez ce que vous avez fait chaque jour',
-        'report.newEntry': 'Nouvelle entrée', 'report.export': 'Exporter', 'report.project': 'Projet',
+        'report.newEntry': 'Nouvelle entrée', 'report.editEntry': "Modifier l'entrée", 'report.export': 'Exporter', 'report.project': 'Projet',
         'report.statsAria': 'Statistiques du rapport', 'report.entriesAria': 'Entrées du rapport',
         'report.distribuzionePerStato': 'Répartition par statut', 'report.distribuzionePerPriorita': 'Répartition par priorité',
         'report.attivitaPerProgetto': 'Tâches par projet', 'report.noDataAvailable': 'Aucune donnée disponible.',
@@ -483,6 +489,7 @@ const I18N_STRINGS = {
         'common.errorApi': 'API-Fehler: {status}',
         'common.showPassword': 'Passwort anzeigen', 'common.hidePassword': 'Passwort verbergen',
         'common.statistics': 'Statistiken',
+        'common.days': 'Tage', 'common.searchMembers': 'Mitglieder suchen…',
 
         'status.completato': 'Abgeschlossen', 'status.inCorso': 'In Bearbeitung', 'status.daIniziare': 'Zu erledigen',
         'status.inPausa': 'Pausiert', 'status.bloccato': 'Blockiert', 'status.daFare': 'Zu erledigen',
@@ -500,6 +507,7 @@ const I18N_STRINGS = {
         'field.nome': 'Name', 'field.descrizione': 'Beschreibung', 'field.stato': 'Status',
         'field.teamLeader': 'Teamleiter', 'field.membriTeam': 'Teammitglieder', 'field.titolo': 'Titel',
         'field.priorita': 'Priorität', 'field.tipologia': 'Kategorie', 'field.tempoStimatoMin': 'Geschätzte Zeit (Min.)',
+        'field.tempoStimato': 'Geschätzte Zeit',
         'field.scadenza': 'Fälligkeitsdatum', 'field.assegnatoA': 'Zugewiesen an', 'field.email': 'E-Mail',
         'field.password': 'Passwort', 'field.area': 'Abteilung', 'field.progetto': 'Projekt', 'field.data': 'Datum',
         'field.task': 'Aufgabe',
@@ -591,7 +599,7 @@ const I18N_STRINGS = {
 
         'report.titleAnalytics': 'Analysen', 'report.subtitleAnalytics': 'Erweiterte Analysen und Berichte',
         'report.titlePersonal': 'Verlauf', 'report.subtitlePersonal': 'Behalten Sie im Blick, was Sie jeden Tag getan haben',
-        'report.newEntry': 'Neuer Eintrag', 'report.export': 'Exportieren', 'report.project': 'Projekt',
+        'report.newEntry': 'Neuer Eintrag', 'report.editEntry': 'Eintrag bearbeiten', 'report.export': 'Exportieren', 'report.project': 'Projekt',
         'report.statsAria': 'Berichtsstatistiken', 'report.entriesAria': 'Berichtseinträge',
         'report.distribuzionePerStato': 'Verteilung nach Status', 'report.distribuzionePerPriorita': 'Verteilung nach Priorität',
         'report.attivitaPerProgetto': 'Aufgaben pro Projekt', 'report.noDataAvailable': 'Keine Daten verfügbar.',
@@ -624,6 +632,7 @@ const I18N_STRINGS = {
         'common.errorApi': 'Error de la API: {status}',
         'common.showPassword': 'Mostrar contraseña', 'common.hidePassword': 'Ocultar contraseña',
         'common.statistics': 'Estadísticas',
+        'common.days': 'Días', 'common.searchMembers': 'Buscar miembros…',
 
         'status.completato': 'Completado', 'status.inCorso': 'En curso', 'status.daIniziare': 'Por iniciar',
         'status.inPausa': 'En pausa', 'status.bloccato': 'Bloqueado', 'status.daFare': 'Por hacer',
@@ -641,6 +650,7 @@ const I18N_STRINGS = {
         'field.nome': 'Nombre', 'field.descrizione': 'Descripción', 'field.stato': 'Estado',
         'field.teamLeader': 'Jefe de proyecto', 'field.membriTeam': 'Miembros del equipo', 'field.titolo': 'Título',
         'field.priorita': 'Prioridad', 'field.tipologia': 'Categoría', 'field.tempoStimatoMin': 'Tiempo estimado (min)',
+        'field.tempoStimato': 'Tiempo estimado',
         'field.scadenza': 'Fecha límite', 'field.assegnatoA': 'Asignado a', 'field.email': 'Correo electrónico',
         'field.password': 'Contraseña', 'field.area': 'Departamento', 'field.progetto': 'Proyecto', 'field.data': 'Fecha',
         'field.task': 'Tarea',
@@ -732,7 +742,7 @@ const I18N_STRINGS = {
 
         'report.titleAnalytics': 'Análisis', 'report.subtitleAnalytics': 'Análisis e informes avanzados',
         'report.titlePersonal': 'Historial', 'report.subtitlePersonal': 'Lleva un registro de lo que hiciste cada día',
-        'report.newEntry': 'Nueva entrada', 'report.export': 'Exportar', 'report.project': 'Proyecto',
+        'report.newEntry': 'Nueva entrada', 'report.editEntry': 'Editar entrada', 'report.export': 'Exportar', 'report.project': 'Proyecto',
         'report.statsAria': 'Estadísticas del informe', 'report.entriesAria': 'Entradas del informe',
         'report.distribuzionePerStato': 'Distribución por estado', 'report.distribuzionePerPriorita': 'Distribución por prioridad',
         'report.attivitaPerProgetto': 'Tareas por proyecto', 'report.noDataAvailable': 'No hay datos disponibles.',
@@ -765,6 +775,7 @@ const I18N_STRINGS = {
         'common.errorApi': 'Gabim API: {status}',
         'common.showPassword': 'Shfaq fjalëkalimin', 'common.hidePassword': 'Fshih fjalëkalimin',
         'common.statistics': 'Statistika',
+        'common.days': 'Ditë', 'common.searchMembers': 'Kërko anëtarë…',
 
         'status.completato': 'Përfunduar', 'status.inCorso': 'Në progres', 'status.daIniziare': 'Për të filluar',
         'status.inPausa': 'Në pauzë', 'status.bloccato': 'Bllokuar', 'status.daFare': 'Për të bërë',
@@ -782,6 +793,7 @@ const I18N_STRINGS = {
         'field.nome': 'Emri', 'field.descrizione': 'Përshkrimi', 'field.stato': 'Statusi',
         'field.teamLeader': 'Udhëheqës ekipi', 'field.membriTeam': 'Anëtarët e ekipit', 'field.titolo': 'Titulli',
         'field.priorita': 'Prioriteti', 'field.tipologia': 'Kategoria', 'field.tempoStimatoMin': 'Koha e vlerësuar (min)',
+        'field.tempoStimato': 'Koha e vlerësuar',
         'field.scadenza': 'Afati', 'field.assegnatoA': 'Caktuar tek', 'field.email': 'Email',
         'field.password': 'Fjalëkalimi', 'field.area': 'Departamenti', 'field.progetto': 'Projekti', 'field.data': 'Data',
         'field.task': 'Detyra',
@@ -873,7 +885,7 @@ const I18N_STRINGS = {
 
         'report.titleAnalytics': 'Analiza', 'report.subtitleAnalytics': 'Analiza dhe raportime të avancuara',
         'report.titlePersonal': 'Historiku', 'report.subtitlePersonal': 'Mbaj gjurmët e asaj që bëre çdo ditë',
-        'report.newEntry': 'Regjistrim i ri', 'report.export': 'Eksporto', 'report.project': 'Projekti',
+        'report.newEntry': 'Regjistrim i ri', 'report.editEntry': 'Modifiko regjistrimin', 'report.export': 'Eksporto', 'report.project': 'Projekti',
         'report.statsAria': 'Statistikat e raportit', 'report.entriesAria': 'Regjistrimet e raportit',
         'report.distribuzionePerStato': 'Shpërndarja sipas statusit', 'report.distribuzionePerPriorita': 'Shpërndarja sipas prioritetit',
         'report.attivitaPerProgetto': 'Detyrat për projekt', 'report.noDataAvailable': 'Nuk ka të dhëna të disponueshme.',
@@ -906,6 +918,7 @@ const I18N_STRINGS = {
         'common.errorApi': 'API-fout: {status}',
         'common.showPassword': 'Wachtwoord tonen', 'common.hidePassword': 'Wachtwoord verbergen',
         'common.statistics': 'Statistieken',
+        'common.days': 'Dagen', 'common.searchMembers': 'Leden zoeken…',
 
         'status.completato': 'Voltooid', 'status.inCorso': 'Bezig', 'status.daIniziare': 'Te starten',
         'status.inPausa': 'Gepauzeerd', 'status.bloccato': 'Geblokkeerd', 'status.daFare': 'Te doen',
@@ -923,6 +936,7 @@ const I18N_STRINGS = {
         'field.nome': 'Naam', 'field.descrizione': 'Beschrijving', 'field.stato': 'Status',
         'field.teamLeader': 'Teamleider', 'field.membriTeam': 'Teamleden', 'field.titolo': 'Titel',
         'field.priorita': 'Prioriteit', 'field.tipologia': 'Categorie', 'field.tempoStimatoMin': 'Geschatte tijd (min)',
+        'field.tempoStimato': 'Geschatte tijd',
         'field.scadenza': 'Deadline', 'field.assegnatoA': 'Toegewezen aan', 'field.email': 'E-mail',
         'field.password': 'Wachtwoord', 'field.area': 'Afdeling', 'field.progetto': 'Project', 'field.data': 'Datum',
         'field.task': 'Taak',
@@ -1014,7 +1028,7 @@ const I18N_STRINGS = {
 
         'report.titleAnalytics': 'Analyses', 'report.subtitleAnalytics': 'Geavanceerde analyses en rapportages',
         'report.titlePersonal': 'Geschiedenis', 'report.subtitlePersonal': 'Houd bij wat je elke dag hebt gedaan',
-        'report.newEntry': 'Nieuwe invoer', 'report.export': 'Exporteren', 'report.project': 'Project',
+        'report.newEntry': 'Nieuwe invoer', 'report.editEntry': 'Invoer bewerken', 'report.export': 'Exporteren', 'report.project': 'Project',
         'report.statsAria': 'Rapportstatistieken', 'report.entriesAria': 'Rapportinvoer',
         'report.distribuzionePerStato': 'Verdeling per status', 'report.distribuzionePerPriorita': 'Verdeling per prioriteit',
         'report.attivitaPerProgetto': 'Taken per project', 'report.noDataAvailable': 'Geen gegevens beschikbaar.',

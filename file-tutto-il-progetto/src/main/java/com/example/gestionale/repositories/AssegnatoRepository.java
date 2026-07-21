@@ -8,4 +8,5 @@ import java.util.List;
 public interface AssegnatoRepository extends JpaRepository<Assegnato, Long> {
     List<Assegnato> findByDipendenteIdDipendente(Long idDipendente);
     List<Assegnato> findByAttivitaIdTask(Long idTask);
+    boolean existsByAttivitaIdTaskAndDipendenteIdDipendente(Long idTask, Long idDipendente);
 }

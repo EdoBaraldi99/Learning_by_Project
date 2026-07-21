@@ -3,6 +3,7 @@ package com.example.gestionale.controllers;
 import com.example.gestionale.dto.AttivitaRequestDTO;
 import com.example.gestionale.dto.AttivitaResponseDTO;
 import com.example.gestionale.services.AttivitaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +23,7 @@ public class AttivitaController {
     }
     @PostMapping("/crea")
     @PreAuthorize("hasRole('ADMIN') or @progettoAuthService.isCapoProgetto(#attivita.idProgetto, authentication)")
-    public ResponseEntity<AttivitaResponseDTO> creaAttivita(@RequestBody AttivitaRequestDTO attivita){
+    public ResponseEntity<AttivitaResponseDTO> creaAttivita(@Valid @RequestBody AttivitaRequestDTO attivita){
         return ResponseEntity.status(201).body(attivitaService.salvaAttivita(attivita));
     }
     @GetMapping("/{id}")
@@ -30,7 +31,7 @@ public class AttivitaController {
         return ResponseEntity.ok(attivitaService.schedaAttivitaPerId(id));
     }
     @PatchMapping("/modifica/{id}")
-    @PreAuthorize("hasRole('ADMIN') or " + "(@progettoAuthService.isCapoProgettoDiAttivita(#id, authentication) " + "and (#attivita.idProgetto == null or @progettoAuthService.isCapoProgetto(#attivita.idProgetto, authentication)))")
+    @PreAuthorize("hasRole('ADMIN') or " + "(@progettoAuthService.isCapoProgettoDiAttivita(#id, authentication) " + "and (#attivita.idProgetto == null or @progettoAuthService.isCapoProgetto(#attivita.idProgetto, authentication))) " + "or @progettoAuthService.isAssegnatoAdAttivita(#id, authentication)")
     public ResponseEntity<AttivitaResponseDTO> modificaAttivitaPerId(@PathVariable("id") Long id, @RequestBody AttivitaRequestDTO attivita){
         return ResponseEntity.ok(attivitaService.modificaAttivitaPerId(id, attivita));
     }

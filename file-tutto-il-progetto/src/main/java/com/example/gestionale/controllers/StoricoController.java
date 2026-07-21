@@ -6,6 +6,8 @@ import com.example.gestionale.dto.StoricoResponseDTO;
 import com.example.gestionale.services.StoricoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -22,8 +24,8 @@ public class StoricoController {
     }
 
     @PostMapping("/crea")
-    public ResponseEntity<StoricoResponseDTO> creaStorico(@RequestBody StoricoRequestDTO storico) {
-        return ResponseEntity.status(201).body(storicoService.salvaStorico(storico));
+    public ResponseEntity<StoricoResponseDTO> creaStorico(@RequestBody StoricoRequestDTO storico, Authentication authentication) {
+        return ResponseEntity.status(201).body(storicoService.salvaStorico(storico, authentication));
     }
 
     @GetMapping("/{id}")
@@ -32,6 +34,7 @@ public class StoricoController {
     }
 
     @PatchMapping("/modifica/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @progettoAuthService.isProprietarioStorico(#id, authentication)")
     public ResponseEntity<StoricoResponseDTO> modificaStoricoPerId(@PathVariable("id") Long id, @RequestBody StoricoRequestDTO storico) {
         return ResponseEntity.ok(storicoService.modificaStorico(id, storico));
     }

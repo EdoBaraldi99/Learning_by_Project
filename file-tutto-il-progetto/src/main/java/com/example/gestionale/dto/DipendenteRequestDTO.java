@@ -1,12 +1,23 @@
 package com.example.gestionale.dto;
 
 import com.example.gestionale.models.Dipendente;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 public class DipendenteRequestDTO {
+    @NotBlank(message = "Il nome è obbligatorio")
     private String nome;
+    @NotBlank(message = "Il cognome è obbligatorio")
     private String cognome;
+    @NotBlank(message = "L'email è obbligatoria")
+    @Email(message = "Formato email non valido")
     private String email;
+    @NotBlank(message = "L'area è obbligatoria")
     private String area;
+    // Nessuna validazione qui: obbligatoria solo in creazione (min. 8 caratteri,
+    // controllato manualmente in DipendenteService.salvaDipendente), assente in
+    // modifica — @NotBlank/@Size romperebbero l'aggiornamento parziale via PATCH,
+    // che non invia mai la password.
     private String password;// in chiaro, verrà hashata nel Service
 
     public DipendenteRequestDTO() {

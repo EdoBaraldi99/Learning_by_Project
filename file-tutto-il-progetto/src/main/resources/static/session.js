@@ -90,6 +90,44 @@ function setupPasswordToggle(inputId, toggleId) {
     return () => setVisible(false);
 }
 
+// Filtra dal vivo gli elementi di un checklist (renderChecklist/renderRadioList
+// in progetti.js/progetti-dettaglio.js/attivita-generale.js) in base al testo
+// digitato nella barra di ricerca associata, senza toccare lo stato dei
+// checkbox/radio già selezionati (nasconde soltanto, non rimuove dal DOM).
+function setupChecklistSearch(searchInputId, checklistId) {
+    const input = document.getElementById(searchInputId);
+    const checklist = document.getElementById(checklistId);
+    if (!input || !checklist) return;
+
+    input.addEventListener('input', () => {
+        const q = input.value.trim().toLowerCase();
+        checklist.querySelectorAll('.checklist__item').forEach(item => {
+            const label = item.querySelector('.checklist__item-label');
+            const text = label ? label.textContent.toLowerCase() : '';
+            item.hidden = q.length > 0 && !text.includes(q);
+        });
+    });
+}
+
+// Conversione del tempo stimato tra minuti totali (formato interno, unico
+// campo esistente sul backend) e la coppia valore+unità mostrata nei form di
+// creazione/modifica attività (minuti/ore/giorni). 1 giorno = 8 ore lavorative,
+// non 24h di calendario, coerente con una stima di sforzo di lavoro.
+const MINUTES_PER_UNIT = { minuti: 1, ore: 60, giorni: 480 };
+
+// Sceglie l'unità più "comoda" per mostrare un totale in minuti: preferisce
+// giorni/ore quando il valore è un multiplo esatto, altrimenti minuti.
+function minutesToValueUnit(totalMinutes) {
+    const m = Number(totalMinutes) || 0;
+    if (m > 0 && m % MINUTES_PER_UNIT.giorni === 0) return { value: m / MINUTES_PER_UNIT.giorni, unit: 'giorni' };
+    if (m > 0 && m % MINUTES_PER_UNIT.ore === 0) return { value: m / MINUTES_PER_UNIT.ore, unit: 'ore' };
+    return { value: m, unit: 'minuti' };
+}
+
+function valueUnitToMinutes(value, unit) {
+    return Math.round((Number(value) || 0) * (MINUTES_PER_UNIT[unit] || 1));
+}
+
 // Notifiche toast per le operazioni di creazione/modifica/eliminazione, uguali
 // su tutte le pagine. Autosufficiente: inietta da sé stile e contenitore nel
 // DOM, così non serve toccare l'HTML/CSS di ogni singola pagina.

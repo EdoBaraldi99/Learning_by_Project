@@ -16,7 +16,7 @@
 
         <!-- Brand -->
         <div class="sidebar-brand">
-            <div class="avatar avatar--blue">TS</div>
+            <img class="sidebar-brand__logo" src="logo.png" alt="TesiSquare">
             <span class="sidebar-brand__title">TesiSquare</span>
         </div>
 
@@ -193,8 +193,15 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" for="edit-estimated" data-i18n="field.tempoStimatoMin">Tempo stimato (min)</label>
-                    <input class="form-input" type="number" id="edit-estimated" min="0" placeholder="es. 120">
+                    <label class="form-label" for="edit-estimated" data-i18n="field.tempoStimato">Tempo stimato</label>
+                    <div class="form-row">
+                        <input class="form-input" type="number" id="edit-estimated" min="0" placeholder="es. 120">
+                        <select class="form-select" id="edit-estimated-unit" style="max-width:110px;">
+                            <option value="minuti" data-i18n="report.minutes">minuti</option>
+                            <option value="ore" data-i18n="report.hours">ore</option>
+                            <option value="giorni" data-i18n="common.days">Giorni</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -205,6 +212,7 @@
 
             <div class="form-group">
                 <span class="form-label" data-i18n="field.assegnatoA">Assegnato a</span>
+                <input type="search" class="form-input" id="edit-assignees-search" placeholder="Cerca membri…" data-i18n-placeholder="common.searchMembers" autocomplete="off">
                 <div class="checklist" id="edit-assignees"></div>
             </div>
 

@@ -152,6 +152,14 @@ button {
     letter-spacing: 0.01em;
 }
 
+.sidebar-brand__logo {
+    height: 34px;
+    width: 34px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 /* Divider */
 .sidebar-divider {
     height: 1px;
@@ -454,11 +462,39 @@ button {
     gap: 6px;
 }
 
+.report-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
 .report-card__title {
     font-size: 15px;
     font-weight: 600;
     color: var(--text-primary);
 }
+
+.icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: background var(--transition), color var(--transition);
+}
+
+.icon-btn svg { width: 15px; height: 15px; }
+
+.icon-btn--edit {
+    background: #ffffff;
+    color: var(--text-secondary);
+    border: 1.5px solid rgba(15, 23, 42, 0.08);
+}
+
+.icon-btn--edit:hover { background: #f1f5f9; color: var(--text-primary); }
 
 .report-card__meta-line {
     font-size: 13px;

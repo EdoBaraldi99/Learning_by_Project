@@ -198,6 +198,21 @@
         if (!res.ok) throw new Error(await parseErrorMessage(res, `Errore API: ${res.status}`));
     }
 
+    async function apiCompleteTask(id) {
+        const currentRes = await Session.authFetch(`${BASE_URL}/attivita/${id}`);
+        if (!currentRes.ok) throw new Error(`Errore API: ${currentRes.status}`);
+        const current = await currentRes.json();
+        current.stato = 'completato';
+
+        const res = await Session.authFetch(`${BASE_URL}/attivita/modifica/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(current)
+        });
+        if (!res.ok) throw new Error(`Errore API: ${res.status}`);
+        return res.json();
+    }
+
     /* ──────────────────────────────────────────────────────
        HELPERS
     ────────────────────────────────────────────────────── */
@@ -326,6 +341,13 @@
         const main = document.getElementById('main-content');
         const overdue = isOverdue(task.dueDate, task.status);
 
+        // Chi gestisce la task (admin/capoprogetto) ha Modifica/Elimina; un
+        // semplice assegnatario non gestore ha solo un modo rapido per segnarla
+        // completata, come già avviene nelle card di dashboard.js/attivita-generale.js.
+        const canComplete = !task.canManageTasks
+            && task.assignees.some(a => a.id === CURRENT_DIPENDENTE_ID)
+            && (task.status === 'in corso' || task.status === 'da iniziare');
+
         const historyEl = task.history.length
             ? `<div class="history-list">${task.history.map(renderHistoryItem).join('')}</div>`
             : `<p class="detail-desc-text">${I18N.t('attivitaDett.nessunaEsecuzione')}</p>`;
@@ -385,6 +407,9 @@
             <div class="detail-header__actions">
                 <button class="btn-edit" type="button" id="task-edit-btn">${ICON.edit} ${I18N.t('common.edit')}</button>
                 <button class="btn-delete" type="button" id="task-delete-btn">${ICON.trash} ${I18N.t('common.delete')}</button>
+            </div>` : canComplete ? `
+            <div class="detail-header__actions">
+                <button class="btn-complete" type="button" id="task-complete-btn">${I18N.t('common.complete')}</button>
             </div>` : ''}
             ${progressCardEl}
         </div>
@@ -478,6 +503,25 @@
         if (task.canManageTasks) {
             document.getElementById('task-edit-btn').addEventListener('click', () => openTaskModal(task));
             document.getElementById('task-delete-btn').addEventListener('click', () => openDeleteModal(task));
+        } else if (canComplete) {
+            document.getElementById('task-complete-btn').addEventListener('click', onCompleteTask);
+        }
+    }
+
+    async function onCompleteTask() {
+        const btn = document.getElementById('task-complete-btn');
+        const original = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = '…';
+        try {
+            await apiCompleteTask(currentTask.id);
+            await loadTask();
+            Toast.success(I18N.t('dashboard.completeSuccess'));
+        } catch (err) {
+            btn.disabled = false;
+            btn.textContent = original;
+            Toast.error(err.message || I18N.t('dashboard.completeError'));
+            console.error('[onCompleteTask]', err);
         }
     }
 
@@ -508,10 +552,13 @@
         document.getElementById('edit-priority').value = (task.priority || '').toLowerCase();
         document.getElementById('edit-category').value = (task.category || '').toLowerCase();
         document.getElementById('edit-status').value = (task.status || '').toLowerCase();
-        document.getElementById('edit-estimated').value = parseMinutes(task.estimatedTime);
+        const estimated = minutesToValueUnit(parseMinutes(task.estimatedTime));
+        document.getElementById('edit-estimated').value = estimated.value;
+        document.getElementById('edit-estimated-unit').value = estimated.unit;
         document.getElementById('edit-due-date').value = task.dueDate || '';
 
         const assigneeIds = task.assignees.map(a => a.id);
+        document.getElementById('edit-assignees-search').value = '';
         renderChecklist(
             'edit-assignees', allDipendenti,
             d => assigneeIds.includes(d.idDipendente),
@@ -537,7 +584,7 @@
             priority: document.getElementById('edit-priority').value,
             category: document.getElementById('edit-category').value,
             status: document.getElementById('edit-status').value,
-            estimatedMinutes: document.getElementById('edit-estimated').value,
+            estimatedMinutes: valueUnitToMinutes(document.getElementById('edit-estimated').value, document.getElementById('edit-estimated-unit').value),
             dueDate: document.getElementById('edit-due-date').value || null,
             assigneeIds: getCheckedValues('edit-assignees')
         };
@@ -659,6 +706,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         Promise.all([loadUser(), loadReferenceData(), loadTask()]);
         document.getElementById('logout-btn').addEventListener('click', Session.logout);
+        setupChecklistSearch('edit-assignees-search', 'edit-assignees');
 
         document.getElementById('edit-modal-close-btn').addEventListener('click', closeEditModal);
         document.getElementById('edit-cancel-btn').addEventListener('click', closeEditModal);

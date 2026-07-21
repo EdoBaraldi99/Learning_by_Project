@@ -5,10 +5,12 @@ import com.example.gestionale.dto.StoricoRequestDTO;
 import com.example.gestionale.dto.StoricoResponseDTO;
 import com.example.gestionale.models.Attivita;
 import com.example.gestionale.exceptions.EntitaNonTrovata;
+import com.example.gestionale.models.Dipendente;
 import com.example.gestionale.models.Storico;
 import com.example.gestionale.repositories.AttivitaRepository;
 import com.example.gestionale.repositories.StoricoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -29,8 +31,12 @@ public class StoricoService {
                 .orElseThrow(() -> new EntitaNonTrovata("Storico con Id: " + id + " non trovato"));
         return StoricoResponseDTO.fromEntity(storico);
     }
-    public StoricoResponseDTO salvaStorico(StoricoRequestDTO storico) {
+    public StoricoResponseDTO salvaStorico(StoricoRequestDTO storico, Authentication authentication) {
         Storico storicoSalvato = storico.toEntity();
+
+        if (authentication != null && authentication.getPrincipal() instanceof Dipendente d) {
+            storicoSalvato.setDipendente(d);
+        }
 
         if (storico.getIdTask() != null) {
             Attivita attivita = attivitaRepository.findById(storico.getIdTask())

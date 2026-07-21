@@ -118,10 +118,10 @@
             manager: teamLeader || { name: '—', avatarColor: 'slate' },
             members,
             currentAssociati: associati,
-            startDate: null,
-            endDate: null,
-            createdAt: null,
-            updatedAt: null,
+            startDate: raw.dataInizio || null,
+            endDate: raw.dataFine || null,
+            createdAt: raw.dataCreazione ? raw.dataCreazione.slice(0, 10) : null,
+            updatedAt: raw.dataAggiornamento ? raw.dataAggiornamento.slice(0, 10) : null,
             tasks: attivita.map(normalizeTask),
             canManageTasks: role === 'admin' || role === 'teamleader',
             canManageProject: role === 'admin'
@@ -158,7 +158,10 @@
         const res = await Session.authFetch(`${BASE_URL}/progetti/modifica/${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nome: payload.nome, descrizione: payload.descrizione, stato: payload.stato })
+            body: JSON.stringify({
+                nome: payload.nome, descrizione: payload.descrizione, stato: payload.stato,
+                dataInizio: payload.dataInizio || null, dataFine: payload.dataFine || null
+            })
         });
         if (!res.ok) throw new Error(await parseErrorMessage(res, `Errore API: ${res.status}`));
 
@@ -787,11 +790,15 @@
         document.getElementById('project-edit-nome').value = currentProject.title;
         document.getElementById('project-edit-desc').value = currentProject.description || '';
         document.getElementById('project-edit-stato').value = (currentProject.status || '').toLowerCase();
+        document.getElementById('project-edit-data-inizio').value = currentProject.startDate || '';
+        document.getElementById('project-edit-data-fine').value = currentProject.endDate || '';
         document.getElementById('project-edit-form-error').hidden = true;
 
         const teamLeaderId = currentProject.currentAssociati.find(a => (a.ruolo || '').toLowerCase() === 'capoprogetto' && a.dipendente)?.dipendente.idDipendente;
         const memberIds = currentProject.currentAssociati.filter(a => a.dipendente).map(a => a.dipendente.idDipendente);
 
+        document.getElementById('project-edit-manager-search').value = '';
+        document.getElementById('project-edit-members-search').value = '';
         renderRadioList('project-edit-manager', allDipendenti, d => d.idDipendente === teamLeaderId, d => d.idDipendente, d => `${d.nome} ${d.cognome}`, d => d.area);
         renderChecklist('project-edit-members', allDipendenti, d => memberIds.includes(d.idDipendente), d => d.idDipendente, d => `${d.nome} ${d.cognome}`, d => d.area);
 
@@ -812,6 +819,8 @@
             nome: document.getElementById('project-edit-nome').value.trim(),
             descrizione: document.getElementById('project-edit-desc').value.trim(),
             stato: document.getElementById('project-edit-stato').value,
+            dataInizio: document.getElementById('project-edit-data-inizio').value || null,
+            dataFine: document.getElementById('project-edit-data-fine').value || null,
             teamLeaderId: getRadioValue('project-edit-manager'),
             memberIds: getCheckedValues('project-edit-members')
         };
@@ -881,10 +890,13 @@
         document.getElementById('edit-priority').value = task ? (task.priority || '').toLowerCase() : 'media';
         document.getElementById('edit-category').value = task ? (task.category || '').toLowerCase() : 'sviluppo';
         document.getElementById('edit-status').value = task ? (task.status || '').toLowerCase() : 'da iniziare';
-        document.getElementById('edit-estimated').value = task ? parseMinutes(task.estimatedTime) : '';
+        const estimated = minutesToValueUnit(task ? parseMinutes(task.estimatedTime) : 0);
+        document.getElementById('edit-estimated').value = task ? estimated.value : '';
+        document.getElementById('edit-estimated-unit').value = estimated.unit;
         document.getElementById('edit-due-date').value = task ? (task.dueDate || '') : '';
 
         const assigneeIds = task ? task.assignees.map(a => a.id) : [];
+        document.getElementById('edit-assignees-search').value = '';
         renderChecklist(
             'edit-assignees', allDipendenti,
             d => assigneeIds.includes(d.idDipendente),
@@ -910,7 +922,7 @@
             priority: document.getElementById('edit-priority').value,
             category: document.getElementById('edit-category').value,
             status: document.getElementById('edit-status').value,
-            estimatedMinutes: document.getElementById('edit-estimated').value,
+            estimatedMinutes: valueUnitToMinutes(document.getElementById('edit-estimated').value, document.getElementById('edit-estimated-unit').value),
             dueDate: document.getElementById('edit-due-date').value || null,
             assigneeIds: getCheckedValues('edit-assignees')
         };
@@ -1050,6 +1062,10 @@
     document.addEventListener('DOMContentLoaded', () => {
         Promise.all([loadUser(), loadReferenceData(), loadProject()]);
         document.getElementById('logout-btn').addEventListener('click', Session.logout);
+
+        setupChecklistSearch('project-edit-manager-search', 'project-edit-manager');
+        setupChecklistSearch('project-edit-members-search', 'project-edit-members');
+        setupChecklistSearch('edit-assignees-search', 'edit-assignees');
 
         document.getElementById('project-edit-modal-close-btn').addEventListener('click', closeProjectEditModal);
         document.getElementById('project-edit-cancel-btn').addEventListener('click', closeProjectEditModal);

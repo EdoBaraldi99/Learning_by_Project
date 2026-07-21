@@ -16,7 +16,7 @@
 
         <!-- Brand -->
         <div class="sidebar-brand">
-            <div class="avatar avatar--blue">TS</div>
+            <img class="sidebar-brand__logo" src="logo.png" alt="TesiSquare">
             <span class="sidebar-brand__title">TesiSquare</span>
         </div>
 
@@ -202,13 +202,26 @@
                 </select>
             </div>
 
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="create-data-inizio" data-i18n="progettiDett.dataInizio">Data inizio</label>
+                    <input class="form-input" type="date" id="create-data-inizio">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="create-data-fine" data-i18n="progettiDett.dataFine">Data fine</label>
+                    <input class="form-input" type="date" id="create-data-fine">
+                </div>
+            </div>
+
             <div class="form-group">
                 <span class="form-label" data-i18n="field.teamLeader">Team Leader</span>
+                <input type="search" class="form-input" id="create-manager-search" placeholder="Cerca membri…" data-i18n-placeholder="common.searchMembers" autocomplete="off">
                 <div class="checklist" id="create-manager"></div>
             </div>
 
             <div class="form-group">
                 <span class="form-label" data-i18n="field.membriTeam">Membri del team</span>
+                <input type="search" class="form-input" id="create-members-search" placeholder="Cerca membri…" data-i18n-placeholder="common.searchMembers" autocomplete="off">
                 <div class="checklist" id="create-members"></div>
             </div>
 

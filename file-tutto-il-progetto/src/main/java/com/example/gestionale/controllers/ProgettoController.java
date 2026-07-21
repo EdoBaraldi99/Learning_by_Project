@@ -5,6 +5,7 @@ import com.example.gestionale.dto.ProgettoResponseDTO;
 import com.example.gestionale.exceptions.EntitaNonTrovata;
 import com.example.gestionale.models.Progetto;
 import com.example.gestionale.services.ProgettoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class ProgettoController {
         return ResponseEntity.ok(progettoService.listaProgetti());
     }
     @PostMapping("/crea")
-    public ResponseEntity<ProgettoResponseDTO> creaProgetto(@RequestBody ProgettoRequestDTO progetto){
+    public ResponseEntity<ProgettoResponseDTO> creaProgetto(@Valid @RequestBody ProgettoRequestDTO progetto){
         return ResponseEntity.status(201).body(progettoService.salvaProgetto(progetto));
     }
     @GetMapping("/{id}")

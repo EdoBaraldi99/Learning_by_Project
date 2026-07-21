@@ -40,7 +40,21 @@ public class DipendenteService {
                 .orElseThrow(() -> new EntitaNonTrovata("Dipendente con Id: " + id + " non trovato"));
         return DipendenteResponseDTO.fromEntity(dipendente);
     }
+    // La password è obbligatoria (min. 8 caratteri) solo in creazione: non può
+    // stare sul DTO come @NotBlank/@Size perché lo stesso DTO è riusato dalla
+    // PATCH di modifica, che non la invia mai.
+    private static final int PASSWORD_MIN_LENGTH = 8;
+
+    private static void richiediNonVuoto(String valore, String messaggioErrore) {
+        if (valore.isBlank()) {
+            throw new IllegalArgumentException(messaggioErrore);
+        }
+    }
+
     public DipendenteResponseDTO salvaDipendente(DipendenteRequestDTO dipendente) {
+        if (dipendente.getPassword() == null || dipendente.getPassword().length() < PASSWORD_MIN_LENGTH) {
+            throw new IllegalArgumentException("La password deve avere almeno " + PASSWORD_MIN_LENGTH + " caratteri");
+        }
         dipendente.setPassword(passwordEncoder.encode(dipendente.getPassword())); // hash applicato dal Service, prima di creare l'entità
         Dipendente dipendenteSalvato = dipendente.toEntity();
         return DipendenteResponseDTO.fromEntity(dipendenteRepository.save(dipendenteSalvato));
@@ -49,10 +63,27 @@ public class DipendenteService {
         Dipendente d = dipendenteRepository.findById(id)
                 .orElseThrow(() -> new EntitaNonTrovata("Dipendente con Id: " + id + " non trovato"));
 
-        if (dipendente.getNome() != null) d.setNome(dipendente.getNome());
-        if (dipendente.getCognome() != null) d.setCognome(dipendente.getCognome());
-        if (dipendente.getEmail() != null) d.setEmail(dipendente.getEmail());
-        if (dipendente.getArea() != null) d.setArea(dipendente.getArea());
+        // null = campo non inviato, non toccare (aggiornamento parziale); una
+        // stringa vuota/di soli spazi invece va sempre rifiutata esplicitamente.
+        if (dipendente.getNome() != null) {
+            richiediNonVuoto(dipendente.getNome(), "Il nome non può essere vuoto");
+            d.setNome(dipendente.getNome());
+        }
+        if (dipendente.getCognome() != null) {
+            richiediNonVuoto(dipendente.getCognome(), "Il cognome non può essere vuoto");
+            d.setCognome(dipendente.getCognome());
+        }
+        if (dipendente.getEmail() != null) {
+            richiediNonVuoto(dipendente.getEmail(), "L'email non può essere vuota");
+            if (!dipendente.getEmail().matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+                throw new IllegalArgumentException("Formato email non valido");
+            }
+            d.setEmail(dipendente.getEmail());
+        }
+        if (dipendente.getArea() != null) {
+            richiediNonVuoto(dipendente.getArea(), "L'area non può essere vuota");
+            d.setArea(dipendente.getArea());
+        }
 
         return DipendenteResponseDTO.fromEntity(dipendenteRepository.save(d));
     }

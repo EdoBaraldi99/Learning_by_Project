@@ -55,7 +55,7 @@ public class SecurityConfig {
                         // frontend statico (html/css/js in src/main/resources/static): deve essere
                         // raggiungibile senza autenticazione, altrimenti non si può nemmeno caricare
                         // login.html per ottenere il token
-                        .requestMatchers(HttpMethod.GET, "/", "/*.html", "/*.css", "/*.js").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/", "/*.html", "/*.css", "/*.js", "/*.png").permitAll()
                         // lettura: chiunque sia autenticato
                         .requestMatchers(HttpMethod.GET, "/progetti/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/attivita/**").authenticated()

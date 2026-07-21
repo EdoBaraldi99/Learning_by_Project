@@ -69,11 +69,17 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach(err ->
                 erroriCampi.put(err.getField(), err.getDefaultMessage())
         );
+        // "messaggio" accanto a "fields": il frontend (parseErrorMessage in ogni
+        // pagina) legge sempre body.messaggio per mostrare l'errore nel form,
+        // stesso campo usato da tutti gli altri handler di questa classe — senza
+        // questo l'utente vedeva solo "Errore API: 400" invece del vero motivo.
+        String messaggio = String.join("; ", erroriCampi.values());
 
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", java.time.LocalDateTime.now());
         body.put("status", HttpStatus.BAD_REQUEST.value());
         body.put("error", "Validation Failed");
+        body.put("messaggio", messaggio);
         body.put("path", request.getRequestURI());
         body.put("fields", erroriCampi);
 

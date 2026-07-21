@@ -33,14 +33,28 @@ public class ProgettoService {
         Progetto p = progettoRepository.findById(id)
                 .orElseThrow(() -> new EntitaNonTrovata("Progetto con Id: " + id + " non trovato"));
 
+        // null = campo non inviato, non toccare (aggiornamento parziale); una
+        // stringa vuota/di soli spazi invece va sempre rifiutata esplicitamente.
         if (progetto.getNome() != null) {
+            if (progetto.getNome().isBlank()) {
+                throw new IllegalArgumentException("Il nome del progetto non può essere vuoto");
+            }
             p.setNome(progetto.getNome());
         }
         if (progetto.getDescrizione() != null) {
             p.setDescrizione(progetto.getDescrizione());
         }
         if (progetto.getStato() != null) {
+            if (progetto.getStato().isBlank()) {
+                throw new IllegalArgumentException("Lo stato del progetto non può essere vuoto");
+            }
             p.setStato(progetto.getStato());
+        }
+        if (progetto.getDataInizio() != null) {
+            p.setDataInizio(progetto.getDataInizio());
+        }
+        if (progetto.getDataFine() != null) {
+            p.setDataFine(progetto.getDataFine());
         }
 
         return ProgettoResponseDTO.fromEntity(progettoRepository.save(p));

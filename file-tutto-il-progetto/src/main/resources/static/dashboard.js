@@ -76,11 +76,29 @@
         return res.json();
     }
 
+    // Ruolo effettivo sulla pagina: 'manager' (dipendente con ruolo diverso da
+    // 'dipendente' su almeno un progetto) vede TUTTE le attività dei progetti che
+    // gestisce, non solo quelle assegnate a sé — stessa regola di deriveScope già
+    // usata in attivita-generale.js/report.js, prima assente qui: un team leader
+    // vedeva solo le proprie attività come se fosse un dipendente semplice.
+    function deriveScope(projects) {
+        const managedProjectIds = projects
+            .filter(p => (p.associati || []).some(a =>
+                a.dipendente && a.dipendente.idDipendente === CURRENT_DIPENDENTE_ID && (a.ruolo || '').toLowerCase() !== 'dipendente'
+            ))
+            .map(p => p.idProgetto);
+        return managedProjectIds.length > 0
+            ? { role: 'manager', managedProjectIds }
+            : { role: 'employee', managedProjectIds: [] };
+    }
+
     async function apiGetMyTasks() {
-        const tasks = await apiGetAllTasks();
-        return tasks
-            .filter(t => (t.assegnati || []).some(a => a.dipendente && a.dipendente.idDipendente === CURRENT_DIPENDENTE_ID))
-            .map(normalizeTask);
+        const [rawTasks, projects] = await Promise.all([apiGetAllTasks(), apiGetAllProjects()]);
+        const scope = deriveScope(projects);
+        const tasks = scope.role === 'manager'
+            ? rawTasks.filter(t => t.progetto && scope.managedProjectIds.includes(t.progetto.idProgetto))
+            : rawTasks.filter(t => (t.assegnati || []).some(a => a.dipendente && a.dipendente.idDipendente === CURRENT_DIPENDENTE_ID));
+        return tasks.map(normalizeTask);
     }
 
     async function apiGetDipendenti() {

@@ -138,6 +138,11 @@
                     taskTitle: s.attivita.titolo,
                     project: s.attivita.progetto ? s.attivita.progetto.nome : '—',
                     assignee: userName,
+                    // Solo chi ha creato la voce può modificarla (vedi @PreAuthorize su
+                    // PATCH /storici/modifica/{id}): le voci storiche precedenti
+                    // all'introduzione di questo campo hanno creatoDaId assente, quindi
+                    // restano visibili ma non modificabili da questa vista.
+                    creatoDaId: s.dipendente ? s.dipendente.idDipendente : null,
                     description: s.descrizione,
                     date: s.data,
                     hours: Math.floor(minutes / 60),
@@ -166,6 +171,21 @@
     async function apiCreateReportEntry(payload) {
         const res = await Session.authFetch(`${BASE_URL}/storici/crea`, {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                data: payload.date,
+                descrizione: payload.description,
+                tempoLavorato: `${Number(payload.hours) || 0}h ${Number(payload.minutes) || 0}m`,
+                idTask: Number(payload.taskId)
+            })
+        });
+        if (!res.ok) throw new Error(`Errore API: ${res.status}`);
+        return res.json();
+    }
+
+    async function apiUpdateReportEntry(id, payload) {
+        const res = await Session.authFetch(`${BASE_URL}/storici/modifica/${id}`, {
+            method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 data: payload.date,
@@ -245,6 +265,10 @@
         </svg>`,
         clock: `<svg class="meta-icon meta-icon--clock" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+        </svg>`,
+        edit: `<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/>
+            <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"/>
         </svg>`
     };
 
@@ -286,9 +310,13 @@
     }
 
     function renderEntryCard(entry) {
+        const canEdit = entry.creatoDaId === CURRENT_DIPENDENTE_ID;
         return `
         <article class="report-card" data-id="${entry.id}">
-            <h3 class="report-card__title">${entry.taskTitle}</h3>
+            <div class="report-card__header">
+                <h3 class="report-card__title">${entry.taskTitle}</h3>
+                ${canEdit ? `<button class="icon-btn icon-btn--edit" type="button" data-edit-id="${entry.id}" aria-label="${I18N.t('common.edit')}">${ICON.edit}</button>` : ''}
+            </div>
             <p class="report-card__meta-line">
                 ${entry.project} <span class="meta-sep">•</span> ${entry.assignee}
             </p>
@@ -316,6 +344,14 @@
         }
 
         list.innerHTML = entries.map(renderEntryCard).join('');
+
+        list.querySelectorAll('[data-edit-id]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const entry = lastEntries.find(en => en.id === Number(btn.dataset.editId));
+                if (entry) openModal(entry);
+            });
+        });
     }
 
     function renderTaskOptions(tasks) {
@@ -327,6 +363,7 @@
     }
 
     let myTasks = [];
+    let lastEntries = [];
 
     async function loadPersonalReport() {
         const statsEl = document.getElementById('stat-cards');
@@ -336,6 +373,7 @@
             renderTaskOptions(myTasks);
 
             const entries = await apiGetReportEntries(myTasks);
+            lastEntries = entries;
             renderEntries(entries);
             renderPersonalStatCards(computePersonalStats(myTasks, entries));
         } catch (err) {
@@ -610,17 +648,29 @@
        MODALE — Nuova voce (solo vista Dipendente)
     ────────────────────────────────────────────────────── */
 
-    function openModal() {
+    let editingEntryId = null;
+
+    // Riusa lo stesso modale per creare e modificare una voce: se "entry" è
+    // presente precompila i campi con i suoi valori (in ore/minuti separati,
+    // come già memorizzati su entry.hours/entry.minutes), altrimenti resetta
+    // il form per una nuova voce vuota.
+    function openModal(entry) {
+        editingEntryId = entry ? entry.id : null;
         const overlay = document.getElementById('modal-overlay');
         const form = document.getElementById('entry-form');
         form.reset();
-        document.getElementById('entry-hours').value = 0;
-        document.getElementById('entry-minutes').value = 0;
+        document.getElementById('modal-title').textContent = entry ? I18N.t('report.editEntry') : I18N.t('report.newEntry');
+        document.getElementById('task-select').value = entry ? entry.taskId : '';
+        document.getElementById('entry-date').value = entry ? entry.date : '';
+        document.getElementById('entry-desc').value = entry ? (entry.description || '') : '';
+        document.getElementById('entry-hours').value = entry ? entry.hours : 0;
+        document.getElementById('entry-minutes').value = entry ? entry.minutes : 0;
         updateSaveButtonState();
         overlay.hidden = false;
     }
 
     function closeModal() {
+        editingEntryId = null;
         document.getElementById('modal-overlay').hidden = true;
     }
 
@@ -647,7 +697,11 @@
         saveBtn.textContent = I18N.t('common.saving');
 
         try {
-            await apiCreateReportEntry(payload);
+            if (editingEntryId) {
+                await apiUpdateReportEntry(editingEntryId, payload);
+            } else {
+                await apiCreateReportEntry(payload);
+            }
             closeModal();
             await loadPersonalReport();
             Toast.success(I18N.t('report.savedSuccess'));
@@ -685,7 +739,7 @@
             document.getElementById('export-btn').addEventListener('click', exportCsv);
         }
 
-        document.getElementById('new-entry-btn').addEventListener('click', openModal);
+        document.getElementById('new-entry-btn').addEventListener('click', () => openModal());
         document.getElementById('modal-close-btn').addEventListener('click', closeModal);
         document.getElementById('cancel-btn').addEventListener('click', closeModal);
 

@@ -4,6 +4,7 @@ import com.example.gestionale.dto.CambioRuoloAdminDTO;
 import com.example.gestionale.dto.DipendenteRequestDTO;
 import com.example.gestionale.dto.DipendenteResponseDTO;
 import com.example.gestionale.services.DipendenteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +24,7 @@ public class DipendenteController {
     }
     @PostMapping("/crea")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<DipendenteResponseDTO> creaDipendente(@RequestBody DipendenteRequestDTO dipendente){
+    public ResponseEntity<DipendenteResponseDTO> creaDipendente(@Valid @RequestBody DipendenteRequestDTO dipendente){
         return ResponseEntity.status(201).body(dipendenteService.salvaDipendente(dipendente));
     }
     @GetMapping("/{id}")
@@ -35,7 +36,13 @@ public class DipendenteController {
     public ResponseEntity<DipendenteResponseDTO> modificaDipendentePerId(@PathVariable("id") Long id, @RequestBody DipendenteRequestDTO dipendente){
         return ResponseEntity.ok(dipendenteService.modificaDipendentePerId(id, dipendente));
     }
+    // Il ruolo ADMIN è già richiesto a livello di URL (SecurityConfig): qui si
+    // aggiunge solo il vincolo "non se stesso", perché il frontend si limita a
+    // nascondere il proprio profilo dall'elenco (utenti.js) — senza questo
+    // controllo lato server, l'admin poteva comunque auto-eliminarsi con una
+    // chiamata diretta all'API.
     @DeleteMapping("/elimina/{id}")
+    @PreAuthorize("#id != authentication.principal.idDipendente")
     public ResponseEntity<String> eliminaDipendentePerId(@PathVariable("id") Long id){
         dipendenteService.eliminaDipendentePerId(id);
         return ResponseEntity.noContent().build();

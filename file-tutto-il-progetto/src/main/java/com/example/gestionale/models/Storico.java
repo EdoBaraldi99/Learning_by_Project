@@ -20,6 +20,11 @@ public class Storico {
     @JoinColumn(name = "id_task", nullable = true)
     public Attivita attivita;
 
+    // Chi ha registrato la voce: nullable perché le voci create prima
+    // dell'introduzione di questo campo non hanno un proprietario noto.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_dipendente", nullable = true)
+    public Dipendente dipendente;
 
     public Storico(){
     }
@@ -40,4 +45,6 @@ public class Storico {
     public void setTempoLavorato(String tempoLavorato) {this.tempoLavorato = tempoLavorato;}
     public Attivita getAttivita() {return attivita;}
     public void setAttivita(Attivita attivita) {this.attivita = attivita;}
+    public Dipendente getDipendente() {return dipendente;}
+    public void setDipendente(Dipendente dipendente) {this.dipendente = dipendente;}
 }

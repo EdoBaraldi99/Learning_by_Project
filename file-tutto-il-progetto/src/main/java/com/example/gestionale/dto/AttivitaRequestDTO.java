@@ -1,17 +1,23 @@
 package com.example.gestionale.dto;
 
 import com.example.gestionale.models.Attivita;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 
 public class AttivitaRequestDTO {
+    @NotBlank(message = "Il titolo è obbligatorio")
     private String titolo;
     private String descrizione;
     private LocalDate dataAssegnazione;
     private LocalDate scadenza;
+    @NotBlank(message = "Il tempo stimato è obbligatorio")
     private String tempoStimato;
+    @NotBlank(message = "Lo stato è obbligatorio")
     private String stato;
+    @NotBlank(message = "La tipologia è obbligatoria")
     private String tipologia;
+    @NotBlank(message = "La priorità è obbligatoria")
     private String priorita;
     private Long idProgetto; // solo l'ID, non l'oggetto Progetto intero
 

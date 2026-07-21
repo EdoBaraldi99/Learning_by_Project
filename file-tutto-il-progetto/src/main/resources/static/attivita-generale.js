@@ -575,7 +575,9 @@
         document.getElementById('edit-priority').value = task ? (task.priority || '').toLowerCase() : 'media';
         document.getElementById('edit-category').value = task ? (task.category || '').toLowerCase() : 'sviluppo';
         document.getElementById('edit-status').value = task ? (task.status || '').toLowerCase() : 'da iniziare';
-        document.getElementById('edit-estimated').value = task ? parseMinutes(task.estimatedTime) : '';
+        const estimated = minutesToValueUnit(task ? parseMinutes(task.estimatedTime) : 0);
+        document.getElementById('edit-estimated').value = task ? estimated.value : '';
+        document.getElementById('edit-estimated-unit').value = estimated.unit;
         document.getElementById('edit-due-date').value = task ? (task.dueDate || '') : '';
 
         const projects = selectableProjects();
@@ -585,6 +587,7 @@
         ).join('');
 
         const assigneeIds = task ? task.assignees.map(a => a.id) : [];
+        document.getElementById('edit-assignees-search').value = '';
         renderChecklist(
             'edit-assignees', allDipendenti,
             d => assigneeIds.includes(d.idDipendente),
@@ -611,7 +614,7 @@
             priority: document.getElementById('edit-priority').value,
             category: document.getElementById('edit-category').value,
             status: document.getElementById('edit-status').value,
-            estimatedMinutes: document.getElementById('edit-estimated').value,
+            estimatedMinutes: valueUnitToMinutes(document.getElementById('edit-estimated').value, document.getElementById('edit-estimated-unit').value),
             dueDate: document.getElementById('edit-due-date').value || null,
             assigneeIds: getCheckedValues('edit-assignees')
         };
@@ -749,6 +752,7 @@
         document.getElementById('search-input').addEventListener('input', onSearch);
         document.getElementById('logout-btn').addEventListener('click', Session.logout);
         document.getElementById('new-task-btn').addEventListener('click', () => openTaskModal(null));
+        setupChecklistSearch('edit-assignees-search', 'edit-assignees');
 
         initFilterDropdown('status-filter', 'status-filter-btn', 'status-filter-menu', 'status-filter-label', 'status', (value) => {
             currentStatusFilter = value;
