@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "gestionale",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "C:\\Users\\ethan.stuani\\Downloads\\Learning_by_Project-main\\Learning_by_Project-main\\file-tutto-il-progetto\\gradlew.bat", "bootRun"],
+      "port": 8080
+    }
+  ]
+}
